@@ -1,4 +1,5 @@
-var Person = require('./models/person');
+var CRUD = require('./crud'),
+    Person = require('./models/person');
 
 module.exports = function(app) {
   // API
@@ -15,70 +16,6 @@ module.exports = function(app) {
         console.log(people.map(personToCSV));
         console.log(list)
         res.csv(list);
-      }
-    });
-  }
-  function readPersonList(req, res) {
-    Person.find().sort('first_name').sort('last_name').exec(function(err, people) {
-      if(err) {
-        next("Oops! Something went wrong when we were searching for people!");
-      } else {
-        res.json(people);
-      }
-    });
-  }
-  function readPerson(req, res) {
-    Person.findOne({slug: req.params.slug}).exec(function(err, person) {
-      if(err) {
-        res.status(404);
-      } else {
-        res.json(person);
-      }
-    });
-  }
-  function createPerson(req, res) {
-    var person;
-    console.log("POST: ", req.body);
-    person = new Person(req.body);
-    console.log(person);
-    person.validate(function(error) {
-      if(error) {
-        res.json({error : error });
-      } else {
-        person.save(function(error, doc) {
-          res.json({obj: doc});
-        });
-      }
-    });
-  }
-  function updatePerson(req, res) {
-    var person;
-    console.log("PUT: ", req.body);
-    var obj = req.body;
-    delete obj._id;
-    Person.findOneAndUpdate({slug: req.params.slug}, obj, function(err, doc) {
-      if(err) {
-        throw err;
-      } else {
-        res.json({obj: doc});
-      }
-    });
-  }
-  function deletePerson(req, res) {
-    Person.findOneAndRemove({slug: req.params.slug}, function(err, doc) {
-      if(err) {
-        res.status(404);
-      } else {
-        if(err) {
-          res.json(err);
-        } else {
-          Person.find().exec(function(err, people) {
-            if(err)
-              res.json(err);
-            else
-              res.json(people);
-          });
-        }
       }
     });
   }
@@ -103,18 +40,20 @@ module.exports = function(app) {
   });
 
   // URLs
+
+  // Backend -- API
+  app.get('/api/people', CRUD.readAll(Person));
+  app.post('/api/people', CRUD.create(Person));
+  app.get('/api/people/:slug', CRUD.read(Person));
+  app.put('/api/people/:slug', CRUD.update(Person));
+  app.del('/api/people/:slug', CRUD.delete(Person));
+
+  // Frontend -- Client
+  // Jade partials
   app.get('/partials/*', function (req, res) {
     var name = req.params[0];
     res.render('partials/' + name);
   });
-
-  app.get('/api/people', readPersonList);
-  app.get('/api/people.csv', readPersonListCSV);
-  app.post('/api/people', createPerson);
-  app.get('/api/people/:slug', readPerson);
-  app.put('/api/people/:slug', updatePerson);
-  app.del('/api/people/:slug', deletePerson);
-
-  // Angular.js
+  // Everything else goes to Angular.js client router
   app.get('/*', function(req, res) { res.render('layout'); });
 }
