@@ -1,0 +1,14 @@
+include addons
+
++datum
+  h3 {{ person.first_name }} {{ person.last_name }}
++multidatum("Important Dates", "person.date")
+  {{ obj.value | date }}
++multidatum("Email", "person.email")
+  a(href='mailto:{{ obj.value }}') {{ obj.value }}
++multidatum("Phone", "person.phone")
+  a(href='tel:{{ obj.value }}') {{ obj.value }}
++multidatum("Social Media", "person.social_media")
+  {{ obj.value }}
++multidatum("Address", "person.address")
+  +address

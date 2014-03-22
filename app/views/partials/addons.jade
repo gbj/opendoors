@@ -1,0 +1,30 @@
+mixin glyphicon(g)
+  span.glyphicon(class="glyphicon-#{g}")
+
+mixin col-label(txt)
+  div.col-sm-3
+    label= txt
+
+mixin datum(txt)
+  div.row
+    if txt
+      +col-label(txt)
+    div.col-sm-9
+      if block
+        block
+
+mixin multidatum(label, field, format)
+  +datum(label)
+    ul
+      li(ng-repeat="obj in #{field}")
+        if block
+          block
+        else
+          {{ obj.value }}
+        span.badge {{ obj.label }}
+
+mixin address
+  a(href="http://maps.google.com/?q={{ obj.street }},%20{{ obj.city }},%20{{ obj.state }}%20{{ obj.zip}}", target='_blank')
+    span {{ obj.street }}
+    br
+    span {{ obj.city }}, {{ obj.state}}, {{ obj.zip }}
