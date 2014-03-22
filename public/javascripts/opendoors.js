@@ -21,3 +21,35 @@ var app = angular.module('opendoors', [])
     }
   });
 });
+
+app.config(['$routeProvider', '$locationProvider', '$httpProvider',
+  function($routeProvider, $locationProvider) {
+    $routeProvider
+      .when('/people', {
+        templateUrl: '/partials/person_list',
+        controller: "PersonListCtrl"
+      })
+      .when('/people/new', {
+        templateUrl: '/partials/person_create',
+        controller: "PersonCreateCtrl"
+      })
+      .when('/people/:slug', {
+        templateUrl: '/partials/person_detail',
+        controller: "PersonDetailCtrl"
+      })
+      .when('/people/:slug/edit', {
+        templateUrl: '/partials/person_update',
+        controller: "PersonUpdateCtrl"
+      })
+      .when('/people/:slug/delete', {
+        templateUrl: '/partials/person_delete',
+        controller: "PersonDeleteCtrl"
+      })
+      .when('/congregation')
+      .when('/congregation/new')
+      .when('/:slug')
+      .when('/:slug/edit')
+      .when('/:slug/delete')
+      .otherwise({templateUrl: '/partials/404'});
+    $locationProvider.html5Mode(true);
+  }]);

@@ -3,6 +3,15 @@ mixin valform(name, fields)
     each field in fields
       if field instanceof Array
         +multipleinput(name, field[0])
+      else if field.type === 'scope_select'
+        div.form-group
+          label.control-label(for="#{field.name}") #{field.label}
+          div.controls
+            - var requiredf = (required ? required='required' : required='false')
+            select(required=requiredf,
+              ng-model="newObj.#{field.name}",
+              name="#{field.name}",
+              ng-options="#{field.scope_variable}")
       else if field.type === 'select'
         p Select
       else

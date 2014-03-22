@@ -1,32 +1,5 @@
 var app = angular.module('opendoors');
 
-app.config(['$routeProvider', '$locationProvider', '$httpProvider',
-  function($routeProvider, $locationProvider) {
-    $routeProvider
-      .when('/people', {
-        templateUrl: '/partials/person_list',
-        controller: "PersonListCtrl"
-      })
-      .when('/people/new', {
-        templateUrl: '/partials/person_create',
-        controller: "PersonCreateCtrl"
-      })
-      .when('/people/:slug', {
-        templateUrl: '/partials/person_detail',
-        controller: "PersonDetailCtrl"
-      })
-      .when('/people/:slug/edit', {
-        templateUrl: '/partials/person_update',
-        controller: "PersonUpdateCtrl"
-      })
-      .when('/people/:slug/delete', {
-        templateUrl: '/partials/person_delete',
-        controller: "PersonDeleteCtrl"
-      })
-      .otherwise({templateUrl: '/partials/404'});
-    $locationProvider.html5Mode(true);
-  }]);
-
 app.controller("PersonListCtrl",
   ['$scope', '$http',
   function ($scope, $http) {
@@ -84,6 +57,15 @@ app.controller("PersonCreateCtrl",
       address: []
     };
 
+    $scope.congregations = undefined;
+    $http.get('/api/congregation')
+      .success(function(data) {
+        $scope.congregations = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+
     $scope.save = function(form) {
       console.log($scope.newObj);
       $http.post('/api/people/', $scope.newObj)
@@ -105,6 +87,15 @@ app.controller("PersonUpdateCtrl",
   ['$scope', '$http', '$location', '$routeParams',
   function($scope, $http, $location, $routeParams) {
     $scope.newObj = undefined;
+
+    $scope.congregations = undefined;
+    $http.get('/api/congregation')
+      .success(function(data) {
+        $scope.congregations = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
 
     // Get initial data for the person
     $http.get('/api/people/'+$routeParams.slug)
