@@ -21,8 +21,9 @@ module.exports = {
   read: function(model) {
     return (function(req, res) {
       model.findOne({slug: req.params.slug}).exec(function(err, obj) {
-        if(err) {
+        if(err || obj === null) {
           res.status(404);
+          res.send('404');
         } else {
           res.json(obj);
         }
@@ -61,6 +62,7 @@ module.exports = {
       model.findOneAndRemove({slug: req.params.slug}, function(err, doc) {
         if(err) {
           res.status(404);
+          res.send('404');
         } else {
           if(err) {
             res.json(err);
