@@ -7,7 +7,7 @@ div.well(ng-controller="PersonUpdateCtrl")
       type: 'scope_select',
       name: 'congregation',
       label: "Congregation",
-      scope_variable: "congregations",
+      scope_variable: "c.name for c in congregations",
       required: true
     },
     {type: 'text', name: 'first_name', label: "First Name", required: true},

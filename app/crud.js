@@ -33,12 +33,14 @@ module.exports = {
   create: function(model) {
     return (function(req, res) {
       var obj = construct(model, [req.body]);
+      console.log("POST: ",req.body);
       obj.validate(function(error) {
         if(error) {
           res.json({error : error });
         } else {
           obj.save(function(error, doc) {
             res.json({obj: doc});
+            console.log("Saved: ",doc)
           });
         }
       });

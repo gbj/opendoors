@@ -1,46 +1,41 @@
 var app = angular.module('opendoors');
 
-var ngCRUD = {
-  readList: function(api) {
-    return ['$scope', '$http',
-    function ($scope, $http) {
-      $scope.obj_list = [];
+app.controller("CongregationListCtrl",
+  ['$scope', '$http',
+  function ($scope, $http) {
+    $scope.people = [];
 
-      // When we load the page, GET the list of people
-      $http.get(api)
+    // When we load the page, GET the list of people
+    $http.get('/api/congregation')
+      .success(function(data) {
+        $scope.people = data;
+        console.log(data);
+      })
+      .error(function(data) {
+        console.log('Error: ', data);
+      });
+
+    $scope.quickdelete = function(slug) {
+      $http.delete('/api/congregation/'+slug)
         .success(function(data) {
-          $scope.obj_list = data;
-          console.log(data);
+          $scope.people = data;
         })
         .error(function(data) {
           console.log('Error: ', data);
         });
-
-      $scope.quickdelete = function(slug) {
-        $http.delete(api+'/'+slug)
-          .success(function(data) {
-            $scope.obj_list = data;
-          })
-          .error(function(data) {
-            console.log('Error: ', data);
-          });
-      }
     }
-  ]
   }
-};
+]);
 
-app.controller("PersonListCtrl", ngCRUD.readList('/api/people'));
-
-app.controller("PersonDetailCtrl",
+app.controller("CongregationDetailCtrl",
   ['$scope', '$routeParams', '$http',
   function($scope, $routeParams, $http) {
-    $scope.person = undefined;
+    $scope.Congregation = undefined;
     console.log($routeParams);
 
-    $http.get('/api/people/'+$routeParams.slug)
+    $http.get('/api/congregation/'+$routeParams.slug)
       .success(function(data) {
-        $scope.person = data;
+        $scope.Congregation = data;
         console.log(data);
       })
       .error(function(data) {
@@ -49,7 +44,7 @@ app.controller("PersonDetailCtrl",
   }
 ]);
 
-app.controller("PersonCreateCtrl",
+app.controller("CongregationCreateCtrl",
   ['$scope', '$http', '$location',
   function($scope, $http, $location) {
     $scope.newObj = {
@@ -72,8 +67,8 @@ app.controller("PersonCreateCtrl",
       });
 
     $scope.save = function(form) {
-      $scope.newObj.congregation = $scope.newObj.congregation._id;
-      $http.post('/api/people/', $scope.newObj)
+      console.log($scope.newObj);
+      $http.post('/api/congregation/', $scope.newObj)
         .success(function(response) {
           if (response.error) {
             console.log(response.error);
@@ -88,7 +83,7 @@ app.controller("PersonCreateCtrl",
   }
 ]);
 
-app.controller("PersonUpdateCtrl",
+app.controller("CongregationUpdateCtrl",
   ['$scope', '$http', '$location', '$routeParams',
   function($scope, $http, $location, $routeParams) {
     $scope.newObj = undefined;
@@ -102,8 +97,8 @@ app.controller("PersonUpdateCtrl",
         console.log("Error: ", data);
       });
 
-    // Get initial data for the person
-    $http.get('/api/people/'+$routeParams.slug)
+    // Get initial data for the Congregation
+    $http.get('/api/congregation/'+$routeParams.slug)
       .success(function(data) {
         $scope.newObj = data;
         console.log(data);
@@ -114,7 +109,7 @@ app.controller("PersonUpdateCtrl",
 
     $scope.save = function(form) {
       console.log($scope.newObj);
-      $http.put('/api/people/'+$scope.newObj.slug, $scope.newObj)
+      $http.put('/api/congregation/'+$scope.newObj.slug, $scope.newObj)
         .success(function(response) {
           if(response.error) {
             console.log(response.error)
@@ -129,15 +124,15 @@ app.controller("PersonUpdateCtrl",
   }
 ]);
 
-app.controller("PersonDeleteCtrl",
+app.controller("CongregationDeleteCtrl",
   ['$scope', '$routeParams', '$http', '$location',
   function($scope, $routeParams, $http, $location) {
     console.log($routeParams);
-    $scope.person = undefined;
+    $scope.Congregation = undefined;
 
-    $http.get('/api/people/'+$routeParams.slug)
+    $http.get('/api/congregation/'+$routeParams.slug)
       .success(function(data) {
-        $scope.person = data;
+        $scope.Congregation = data;
         console.log(data);
       })
       .error(function(data) {
@@ -145,7 +140,7 @@ app.controller("PersonDeleteCtrl",
       });
 
     $scope.del = function() {
-      $http.delete('/api/people/'+$routeParams.slug)
+      $http.delete('/api/congregation/'+$routeParams.slug)
         .success(function(data) {
           $location.path('/people');
         })

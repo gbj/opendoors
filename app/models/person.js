@@ -2,7 +2,11 @@ var mongoose = require('mongoose'),
     slugs = require('mongoose-uniqueslugs');
 
 var personSchema = new mongoose.Schema({
-  congregation: {type: mongoose.Schema.Types.ObjectId, ref: 'Congregation'},
+  congregation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Congregation',
+    required: true
+  },
   first_name: {type: String, required: true},
   last_name: {type: String, required: true},
   date: [{

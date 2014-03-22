@@ -45,11 +45,26 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         templateUrl: '/partials/person_delete',
         controller: "PersonDeleteCtrl"
       })
-      .when('/congregation')
-      .when('/congregation/new')
-      .when('/:slug')
-      .when('/:slug/edit')
-      .when('/:slug/delete')
+      .when('/congregation', {
+        templateUrl: '/partials/congregation_list',
+        controller: 'CongregationListCtrl'
+      })
+      .when('/congregation/new', {
+        templateUrl: '/partials/congregation_create',
+        controller: 'CongregationCreateCtrl'
+      })
+      .when('/:slug', {
+        templateUrl: '/partials/congregation_detail',
+        controller: 'CongregationDetailCtrl'
+      })
+      .when('/:slug/edit', {
+        templateUrl: '/partials/congregation_update',
+        controller: 'CongregationUpdateCtrl'
+      })
+      .when('/:slug/delete', {
+        templateUrl: '/partials/congregation_delete',
+        controller: 'CongregationDeleteCtrl'
+      })
       .otherwise({templateUrl: '/partials/404'});
     $locationProvider.html5Mode(true);
   }]);
