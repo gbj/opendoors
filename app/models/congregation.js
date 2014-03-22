@@ -2,9 +2,8 @@ var mongoose = require('mongoose'),
     slugs = require('mongoose-uniqueslugs');
 
 var congregationSchema = new mongoose.Schema({
-  parent: {type: ObjectId, ref: 'Congregation'},
+  parent: {type: mongoose.Schema.Types.ObjectId, ref: 'Congregation'},
   name: {type: String, required: true},
-  short_name: {type: String},
   color: {type: String},
   website: {type: String},
   phone: [{
