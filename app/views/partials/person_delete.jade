@@ -1,8 +1,7 @@
 include addons
 
-div.container
-  div.well(ng-controller="PersonDeleteCtrl")
-    p Are you sure you want to delete {{ person.first_name }} {{ person.last_name }}?
-    form.form-horizontal(name="personDelForm", ng-submit="del(personDelForm)")
-      button.btn.btn-default(type='submit') Yes
-      a.btn.btn-default(href='/people') No
+div.well(ng-controller="PersonDeleteCtrl")
+  p Are you sure you want to delete {{ person.first_name }} {{ person.last_name }}?
+  form.form-horizontal(name="personDelForm", ng-submit="del(personDelForm)")
+    button.btn.btn-default(type='submit') Yes
+    a.btn.btn-default(href='/people') No

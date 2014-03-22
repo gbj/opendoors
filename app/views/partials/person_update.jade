@@ -1,14 +1,13 @@
 include addons
 include forms
 
-div.container
-  div.well(ng-controller="PersonUpdateCtrl")
-    +valform('personUpdateForm', [
-      {type: 'text', name: 'first_name', label: "First Name", required: true},
-      {type: 'text', name: 'last_name', label: "Last Name", required: true},
-      [{type: 'date', name: 'date', label: "Important Dates"}],
-      [{type: 'email', name: 'email', label: "Email"}],
-      [{type: 'phone', name: 'phone', label: "Phone"}],
-      [{type: 'text', name: 'social_media', label: "Social Media"}],
-      [{type: 'location', name: 'address', label: "Address"}]
-    ])
+div.well(ng-controller="PersonUpdateCtrl")
+  +valform('personUpdateForm', [
+    {type: 'text', name: 'first_name', label: "First Name", required: true},
+    {type: 'text', name: 'last_name', label: "Last Name", required: true},
+    [{type: 'date', name: 'date', label: "Important Dates"}],
+    [{type: 'email', name: 'email', label: "Email"}],
+    [{type: 'phone', name: 'phone', label: "Phone"}],
+    [{type: 'text', name: 'social_media', label: "Social Media"}],
+    [{type: 'location', name: 'address', label: "Address"}]
+  ])
