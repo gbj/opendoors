@@ -1,5 +1,6 @@
 var CRUD = require('./crud'),
-    Person = require('./models/person');
+    Person = require('./models/person'),
+    Congregation = require('./models/congregation');
 
 module.exports = function(app) {
   // API
@@ -47,6 +48,11 @@ module.exports = function(app) {
   app.get('/api/people/:slug', CRUD.read(Person));
   app.put('/api/people/:slug', CRUD.update(Person));
   app.del('/api/people/:slug', CRUD.delete(Person));
+  app.get('/api/congregation', CRUD.readAll(Congregation));
+  app.post('/api/congregation', CRUD.create(Congregation));
+  app.get('/api/congregation/:slug', CRUD.read(Congregation));
+  app.put('/api/congregation/:slug', CRUD.update(Congregation));
+  app.del('/api/congregation/:slug', CRUD.delete(Congregation));
 
   // Frontend -- Client
   // Jade partials
