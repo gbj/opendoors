@@ -31,10 +31,6 @@ var personSchema = new mongoose.Schema({
     zip: String
   }],
 }, {
-  // Set the MongoDB collection name
-  // See note on: http://mongoosejs.com/docs/api.html#index_Mongoose-model
-  // See option 'collection' on: http://mongoosejs.com/docs/api.html#index_Mongoose-Schema
-  collection: 'person',
   toJSON: {virtuals: true},
   toObject: {virtuals: true}
 });
@@ -46,9 +42,6 @@ slugs.enhanceSchema(personSchema, {
 })
 
 // Register the model
-// Optional third argument specifies collection
-// See: http://stackoverflow.com/a/7997403/977931
-// And see note on: http://mongoosejs.com/docs/api.html#index_Mongoose-model
 var Person = mongoose.model('Person', personSchema);
 slugs.enhanceModel(Person, {});
 module.exports = Person;
