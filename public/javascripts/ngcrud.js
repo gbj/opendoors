@@ -4,7 +4,7 @@ var ngCRUD = {
       function ($scope, $http) {
         $scope.obj_list = [];
 
-        // When we load the page, GET the list of people
+        // When we load the page, GET the list of objects
         $http.get(api)
           .success(function(data) {
             $scope.obj_list = data;
@@ -29,11 +29,11 @@ var ngCRUD = {
   read: function(api) {
     return ['$scope', '$routeParams', '$http',
       function($scope, $routeParams, $http) {
-        $scope.person = undefined;
+        $scope.obj = undefined;
 
         $http.get(api+'/'+$routeParams.slug)
           .success(function(data) {
-            $scope.person = data;
+            $scope.obj = data;
             console.log(data);
           })
           .error(function(data) {

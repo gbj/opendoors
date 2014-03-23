@@ -30,10 +30,10 @@ div.well
             a(ng-click="quickdelete(congregation.slug)")
               +glyphicon("remove")
           td
-            a(href='/people/{{ congregation.slug }}/edit')
+            a(href='/{{ congregation.slug }}/edit')
               +glyphicon("edit")
           td
-            a(href='/people/{{ congregation.slug }}')
+            a(href='/{{ congregation.slug }}')
               +glyphicon("info-sign")
           td {{ congregation.name }}
           td

@@ -8,7 +8,7 @@ mixin valform(name, fields)
           label.control-label(for="#{field.name}") #{field.label}
           div.controls
             - var requiredf = (required ? required='required' : required='false')
-            select(required=requiredf,
+            select(ng-required=requiredf,
               ng-model="newObj.#{field.name}",
               name="#{field.name}",
               ng-options="#{field.scope_variable}")
@@ -24,7 +24,7 @@ mixin input(required, type, name, label, model)
   else
     div.controls
       - var requiredf = (required ? required='required' : required='false')
-      input.form-control(required=requiredf,
+      input.form-control(ng-required=requiredf,
             type='#{type}',
             ng-model='#{model}',
             name='#{name}',
@@ -33,7 +33,7 @@ mixin input(required, type, name, label, model)
 mixin locationfield(required, model, name, fieldname, label)
   div.controls
     - var requiredf = (required ? required='required' : required='false')
-    input.form-control(required=requiredf,
+    input.form-control(ng-required=requiredf,
           type='text',
           ng-model='#{model}.#{fieldname}',
           name='#{name}.#{fieldname}',
