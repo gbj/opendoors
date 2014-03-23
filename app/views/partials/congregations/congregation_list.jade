@@ -38,8 +38,8 @@ div.well
               +glyphicon("info-sign")
           td {{ congregation.name }}
           td
-            a(href="mailto:{{ congregation.email[0].value }}")
-              {{ congregation.email[0].value }}
+            +address_gmaps("congregation.address[0]")
+              {{ congregation.address[0].city }}
           td
             a(href="{{ congregation.website }}")
               {{ congregation.website }}

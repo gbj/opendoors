@@ -2,7 +2,7 @@ doctype html
 html(lang='en', ng-app='opendoors')
   head
     base(href='/')
-    block title
+    title(ng-bind="'OpenDoors - '+$root.title") OpenDoors - Welcome
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
     script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js')

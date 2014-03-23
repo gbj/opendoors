@@ -23,8 +23,13 @@ mixin multidatum(label, field, format)
           {{ obj.value }}
         span.badge {{ obj.label }}
 
+mixin address_gmaps(src)
+  a(href="http://maps.google.com/?q={{ #{src}.street }},%20{{ #{src}.city }},%20{{ #{src}.state }}%20{{ #{src}.zip}}", target='_blank')
+    if block
+      block
+
 mixin address
-  a(href="http://maps.google.com/?q={{ obj.street }},%20{{ obj.city }},%20{{ obj.state }}%20{{ obj.zip}}", target='_blank')
+  +address_gmaps("obj")
     span {{ obj.street }}
     br
     span {{ obj.city }}, {{ obj.state}}, {{ obj.zip }}

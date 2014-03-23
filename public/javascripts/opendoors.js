@@ -26,52 +26,52 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/people', {
-        templateUrl: '/partials/person_list',
+        templateUrl: '/partials/people/person_list',
         controller: "PersonListCtrl",
         title: "People"
       })
       .when('/people/new', {
-        templateUrl: '/partials/person_create',
+        templateUrl: '/partials/people/person_create',
         controller: "PersonCreateCtrl",
         title: "Add a Person"
       })
       .when('/people/:slug', {
-        templateUrl: '/partials/person_detail',
+        templateUrl: '/partials/people/person_detail',
         controller: "PersonDetailCtrl",
         title: "People"
       })
       .when('/people/:slug/edit', {
-        templateUrl: '/partials/person_update',
+        templateUrl: '/partials/people/person_update',
         controller: "PersonUpdateCtrl",
         title: "Edit a Person"
       })
       .when('/people/:slug/delete', {
-        templateUrl: '/partials/person_delete',
+        templateUrl: '/partials/people/person_delete',
         controller: "PersonDeleteCtrl",
         title: "Delete a Person"
       })
       .when('/congregation', {
-        templateUrl: '/partials/congregation_list',
+        templateUrl: '/partials/congregations/congregation_list',
         controller: 'CongregationListCtrl',
         title: "Congregations"
       })
       .when('/congregation/new', {
-        templateUrl: '/partials/congregation_create',
+        templateUrl: '/partials/congregations/congregation_create',
         controller: 'CongregationCreateCtrl',
         title: "Add a Congregation"
       })
       .when('/:slug', {
-        templateUrl: '/partials/congregation_detail',
+        templateUrl: '/partials/congregations/congregation_detail',
         controller: 'CongregationDetailCtrl',
         title: "Congregations"
       })
       .when('/:slug/edit', {
-        templateUrl: '/partials/congregation_update',
+        templateUrl: '/partials/congregations/congregation_update',
         controller: 'CongregationUpdateCtrl',
         title: "Edit a Congregation"
       })
       .when('/:slug/delete', {
-        templateUrl: '/partials/congregation_delete',
+        templateUrl: '/partials/congregations/congregation_delete',
         controller: 'CongregationDeleteCtrl',
         title: "Delete a Congregation"
       })
