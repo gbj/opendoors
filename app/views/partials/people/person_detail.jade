@@ -1,0 +1,15 @@
+include ../addons
+
++editdeletebuttons('/people/{{ obj.slug }}')
++datum
+  h3 {{ obj.first_name }} {{ obj.last_name }}
++multidatum("Important Dates", "obj.date")
+  {{ obj.value | date }}
++multidatum("Email", "obj.email")
+  a(href='mailto:{{ obj.value }}') {{ obj.value }}
++multidatum("Phone", "obj.phone")
+  a(href='tel:{{ obj.value }}') {{ obj.value }}
++multidatum("Social Media", "obj.social_media")
+  {{ obj.value }}
++multidatum("Address", "obj.address")
+  +address

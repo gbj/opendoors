@@ -1,0 +1,20 @@
+include ../addons
+include ../forms
+
+div.well(ng-controller="PersonCreateCtrl")
+  +valform('personCreateForm', [
+    {
+      type: 'scope_select',
+      name: 'congregation',
+      label: "Congregation",
+      scope_variable: "c.name for c in congregations",
+      required: true
+    },
+    {type: 'text', name: 'first_name', label: "First Name", required: true},
+    {type: 'text', name: 'last_name', label: "Last Name", required: true},
+    [{type: 'date', name: 'date', label: "Important Dates"}],
+    [{type: 'email', name: 'email', label: "Email"}],
+    [{type: 'tel', name: 'phone', label: "Phone"}],
+    [{type: 'text', name: 'social_media', label: "Social Media"}],
+    [{type: 'location', name: 'address', label: "Address"}]
+  ])
