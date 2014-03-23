@@ -6,8 +6,11 @@ div.detail
     h1 {{ obj.first_name }} {{ obj.last_name }}
   +datum
     h2 ({{ obj.congregation.name }})
+  div(ng-showif="obj.age")
+    +datum
+      h3 {{ obj.age }}
   +multidatum("Important Dates", "obj.date")
-    {{ obj.value | date }}
+    {{ obj.value | date }} 
   +multidatum("Email", "obj.email")
     a(ng-href='mailto:{{ obj.value }}') {{ obj.value }}
   +multidatum("Phone", "obj.phone")

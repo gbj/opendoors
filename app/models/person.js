@@ -1,6 +1,9 @@
 var mongoose = require('mongoose'),
     slugs = require('mongoose-uniqueslugs');
 
+var moment = require('moment');
+moment().format();
+
 var personSchema = new mongoose.Schema({
   congregation: {
     type: mongoose.Schema.Types.ObjectId,
@@ -41,6 +44,27 @@ var personSchema = new mongoose.Schema({
 });
 personSchema.virtual('name').get(function () {
   return (this.first_name+" "+this.last_name);
+});
+personSchema.virtual('age').get(function() {
+  var birthday = null;
+  for(var ii in this.date) {
+    var date = this.date[ii];
+    if(date.label === "Birthday" || date.label === "birthday") {
+      birthday = moment(date.value);
+    }
+  }
+  if(birthday) {
+    var now = moment();
+    var age = now.diff(birthday, 'years');
+    if(age < 2) {
+      age = now.diff(birthday, 'months')+' months old';
+    } else {
+      age = age+' years old';
+    }
+    return age;
+  } else {
+    return null;
+  }
 });
 slugs.enhanceSchema(personSchema, {
   source: 'name'

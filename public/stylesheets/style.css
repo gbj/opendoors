@@ -28,6 +28,25 @@ a {
     display: none;
   }
 }
+.detail h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+.detail h2 {
+  font-size: 1.2em;
+  font-weight: normal;
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+.detail h3 {
+  font-size: 1em;
+  font-weight: normal;
+  font-style: italic;
+  margin: 0 0 15px 0;
+  padding: 0;
+}
 .detail ul {
   list-style-type: none;
   margin: 0;
@@ -46,4 +65,8 @@ a {
 
 .form-horizontal input {
   margin-bottom: 5px;
+}
+
+.form-horizontal .btn-primary {
+  margin-top: 5px;
 }

@@ -9,7 +9,9 @@ mixin valform(name, fields)
         p Select
       else
         +textfield(name, field)
-    button.btn.btn-default(type='submit') Submit
+    div.row
+      div.col-sm-6
+        button.btn.btn-primary(type='submit') Submit
 
 mixin scope_select(field)
   div.row.form-group
