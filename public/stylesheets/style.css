@@ -10,13 +10,16 @@ a {
 .editdeletebuttons {
   float: right;
 }
+.editdeletebuttons .label {
+  font-size: 12px;
+}
 
 .detail {
   background-color: #f6f6f6;
   border: 1px solid #e7e7e7;
-  padding: 10px 30px;
+  padding: 10px 10px;
 }
-@media (min-width: 320px) {
+@media (max-width: 460px) {
   .detail {
     margin: 0;
     padding: 10px 10px;
