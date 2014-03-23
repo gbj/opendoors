@@ -43,3 +43,7 @@ a {
 .detail ul li:last-child {
   margin-bottom: 10px;
 }
+
+.form-horizontal input {
+  margin-bottom: 5px;
+}
