@@ -4,19 +4,22 @@ mixin valform(name, fields)
       if field instanceof Array
         +multipleinput(name, field[0])
       else if field.type === 'scope_select'
-        div.form-group
-          label.control-label(for="#{field.name}") #{field.label}
-          div.controls
-            - var requiredf = (required ? required='required' : required='false')
-            select(ng-required=requiredf,
-              ng-model="newObj.#{field.name}",
-              name="#{field.name}",
-              ng-options="#{field.scope_variable}")
+        +scope_select(field)
       else if field.type === 'select'
         p Select
       else
         +textfield(name, field)
     button.btn.btn-default(type='submit') Submit
+
+mixin scope_select(field)
+  div.form-group
+    label.control-label(for="#{field.name}") #{field.label}
+    div.controls
+      - var requiredf = (required ? required='required' : required='false')
+      select(ng-required=requiredf,
+        ng-model="newObj.#{field.name}",
+        name="#{field.name}",
+        ng-options="#{field.scope_iterator}")
 
 mixin input(required, type, name, label, model)
   if type === 'location'

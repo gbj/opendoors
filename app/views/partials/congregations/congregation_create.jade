@@ -6,8 +6,10 @@ div.well(ng-controller="CongregationCreateCtrl")
     {
       type: 'scope_select',
       name: 'parent',
-      label: "Congregation",
-      scope_variable: "c.name for c in congregations",
+      label: "Parent Congregation",
+      scope_variable: "congregations",
+      scope_iterator: "c._id as c.name for c in congregations",
+      required: true,
     },
     {type: 'text', name: 'name', label: "Name", required: true},
     {type: 'text', name: 'color', label: "Color", required: false},

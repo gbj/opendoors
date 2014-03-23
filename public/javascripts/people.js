@@ -15,9 +15,6 @@ app.controller("PersonCreateCtrl", ngCRUD.create('/api/people', '/people', {
       .error(function(data) {
         console.log("Error: ", data);
       });
-  },
-  preSave: function($scope, $http) {
-    $scope.newObj.congregation = $scope.newObj.congregation._id;
   }
 }));
 app.controller("PersonUpdateCtrl", ngCRUD.update('/api/people', '/people', {
@@ -34,13 +31,10 @@ app.controller("PersonUpdateCtrl", ngCRUD.update('/api/people', '/people', {
     $http.get('/api/people/'+slug)
       .success(function(data) {
         $scope.newObj = data;
-        console.log(data);
+        console.log('newObj: ', data);
       })
       .error(function(data) {
         console.log('Error: ', data);
       });
-  },
-  preSave: function($scope, $http) {
-    $scope.newObj.congregation = $scope.newObj.congregation._id;
   }
 }));

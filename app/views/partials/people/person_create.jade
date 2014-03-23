@@ -7,8 +7,9 @@ div.well(ng-controller="PersonCreateCtrl")
       type: 'scope_select',
       name: 'congregation',
       label: "Congregation",
-      scope_variable: "c.name for c in congregations",
-      required: true
+      scope_variable: "congregations",
+      scope_iterator: "c._id as c.name for c in congregations",
+      required: true,
     },
     {type: 'text', name: 'first_name', label: "First Name", required: true},
     {type: 'text', name: 'last_name', label: "Last Name", required: true},

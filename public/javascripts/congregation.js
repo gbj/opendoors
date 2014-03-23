@@ -15,10 +15,6 @@ app.controller("CongregationCreateCtrl", ngCRUD.create('/api/congregation', '', 
       .error(function(data) {
         console.log("Error: ", data);
       });
-  },
-  preSave: function($scope, $http) {
-    if($scope.newObj.parent)
-      $scope.newObj.parent = $scope.newObj.parent._id;
   }
 }));
 app.controller("CongregationUpdateCtrl", ngCRUD.update('/api/congregation', '', {
@@ -40,9 +36,5 @@ app.controller("CongregationUpdateCtrl", ngCRUD.update('/api/congregation', '', 
         .error(function(data) {
           console.log('Error: ', data);
         });
-  },
-  preSave: function($scope, $http) {
-    if($scope.newObj.parent)
-      $scope.newObj.parent = $scope.newObj.parent._id;
   }
 }));

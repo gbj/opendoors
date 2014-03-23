@@ -3,14 +3,16 @@ include ../addons
 div.detail
   +editdeletebuttons('/people/{{ obj.slug }}')
   +datum
-    h3 {{ obj.first_name }} {{ obj.last_name }}
+    h1 {{ obj.first_name }} {{ obj.last_name }}
+  +datum
+    h2 {{ obj.congregation }}
   +multidatum("Important Dates", "obj.date")
     {{ obj.value | date }}
   +multidatum("Email", "obj.email")
-    a(href='mailto:{{ obj.value }}') {{ obj.value }}
+    a(ng-href='mailto:{{ obj.value }}') {{ obj.value }}
   +multidatum("Phone", "obj.phone")
-    a(href='tel:{{ obj.value }}') {{ obj.value }}
+    a(ng-href='tel:{{ obj.value }}') {{ obj.value }}
   +multidatum("Social Media", "obj.social_media")
-    {{ obj.value }}
+    a(ng-href='http://www.{{ obj.label }}.com/{{ obj.value }}', target="_blank"){{ obj.value }}
   +multidatum("Address", "obj.address")
     +address
