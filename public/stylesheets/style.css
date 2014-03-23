@@ -13,6 +13,35 @@ a {
   font-size: 12px;
 }
 
+.person-list a.action {
+  margin-right: 6px;
+}
+.person-list a.action:last-child {
+  margin-right: 0;
+}
+.person-list .col-sm-3:last-child {
+  text-align: right;
+}
+@media (max-width: 460px) {
+  .list .input-group {
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 5px;
+    padding-bottom: 15px;
+  }
+  .person-list {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-bottom: 1px solid #e7e7e7;
+  }
+  .person-list:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .person-list .col-sm-3:last-child {
+    text-align: left;
+  }
+}
+
 .detail {
   background-color: #f6f6f6;
   border: 1px solid #e7e7e7;

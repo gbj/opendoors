@@ -1,43 +1,30 @@
 include ../addons
 
 h1= title
-p There are {{ obj_list.length }} people.
-div.well
+div.list.well
   div.row
-    div.col-sm-8
-      div.btn-toolbar
-        div.btn-group
-          a.btn.btn-primary(href='/people/new') New User
-          button.btn.btn-default Import
-          a.btn.btn-default(href='/api/people.csv') Export
-    div.col-sm-4
+    div.input-group
+      span.input-group-btn
+        a.btn.btn-primary(href='/people/new')
+          +glyphicon("plus")
+          | Add
       input.form-control(type='search',
                          placeholder="Search",
-                         ng-model="search")
-  hr
-  div.table-responsive
-    table.table.table-striped
-      thead
-        tr.row
-          th
-          th
-          th
-          th First Name
-          th Last Name
-          th Email
-      tbody
-        tr.row(ng-repeat="person in obj_list | filter:search")
-          td
-            a(ng-click="quickdelete(person.slug)")
-              +glyphicon("remove")
-          td
-            a(href='/people/{{ person.slug }}/edit')
-              +glyphicon("edit")
-          td
-            a(href='/people/{{ person.slug }}')
-              +glyphicon("info-sign")
-          td {{ person.first_name }}
-          td {{ person.last_name }}
-          td
-            a(href="mailto:{{ person.email[0].value }}")
-              {{ person.email[0].value }}
+                         ng-model="search")  
+  div.person-list.row(ng-repeat="person in obj_list | filter:search")
+    div.hidden-xs.col-sm-2
+      a.action(ng-click="quickdelete(person.slug)")
+        +glyphicon("remove")
+      a.action(href='/people/{{ person.slug }}/edit')
+        +glyphicon("edit")
+      a.action(href='/people/{{ person.slug }}')
+        +glyphicon("info-sign")
+    div.col-sm-2.hidden-xs {{ person.first_name }}
+    div.col-sm-2.hidden-xs {{ person.last_name }}
+    div.col-sm-3.visible-xs {{ person.name }}
+    div.col-sm-3
+      a(href="mailto:{{ person.email[0].value }}")
+        {{ person.email[0].value }}
+    div.col-sm-3
+      a(href="tel:{{ person.phone[0].value }}")
+        {{ person.phone[0].value }}
