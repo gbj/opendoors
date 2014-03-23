@@ -3,14 +3,15 @@ include ../addons
 
 div.list.well
   div.row
-    div.input-group
-      span.input-group-btn
-        a.btn.btn-primary(href='/congregation/new')
-          +glyphicon("plus")
-          | Add
-      input.form-control(type='search',
-                         placeholder="Search",
-                         ng-model="search")  
+    div.col-xs-12
+      div.input-group
+        span.input-group-btn
+          a.btn.btn-primary(href='/congregation/new')
+            +glyphicon("plus")
+            | Add
+        input.form-control(type='search',
+                           placeholder="Search",
+                           ng-model="search")  
   div.person-list.row(ng-repeat="obj in obj_list | filter:search")
     div.hidden-xs.col-sm-2
       a.action(ng-click="quickdelete(obj.slug)")
@@ -19,10 +20,10 @@ div.list.well
         +glyphicon("edit")
       a.action(href='/{{ obj.slug }}')
         +glyphicon("info-sign")
-    div.col-sm-3 {{ obj.name }}
-    div.col-sm-3
+    div.col-sm-4 {{ obj.name }}
+    div.col-sm-2
       +address_gmaps("obj.address[0]")
         {{ obj.address[0].city }}
-    div.col-sm-3
+    div.col-sm-4
       a(href="{{ obj.website }}")
         {{ obj.website }}

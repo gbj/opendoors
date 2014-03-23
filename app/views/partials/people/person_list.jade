@@ -2,14 +2,15 @@ include ../addons
 
 div.list.well
   div.row
-    div.input-group
-      span.input-group-btn
-        a.btn.btn-primary(href='/people/new')
-          +glyphicon("plus")
-          | Add
-      input.form-control(type='search',
-                         placeholder="Search",
-                         ng-model="search")  
+    div.col-xs-12
+      div.input-group
+        span.input-group-btn
+          a.btn.btn-primary(href='/people/new')
+            +glyphicon("plus")
+            | Add
+        input.form-control(type='search',
+                           placeholder="Search",
+                           ng-model="search")  
   div.person-list.row(ng-repeat="person in obj_list | filter:search")
     div.hidden-xs.col-sm-2
       a.action(ng-click="quickdelete(person.slug)")

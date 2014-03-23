@@ -12,7 +12,9 @@ a {
 .editdeletebuttons .label {
   font-size: 12px;
 }
-
+.person-list {
+  margin: 10px 0;
+}
 .person-list a.action {
   margin-right: 6px;
 }
@@ -22,13 +24,14 @@ a {
 .person-list .col-sm-3:last-child {
   text-align: right;
 }
+.list .input-group {
+  border-bottom: 1px solid #e7e7e7;
+  margin-bottom: 5px;
+  padding-bottom: 15px;
+}
 @media (max-width: 460px) {
-  .list .input-group {
-    border-bottom: 1px solid #e7e7e7;
-    margin-bottom: 5px;
-    padding-bottom: 15px;
-  }
   .person-list {
+    margin: 0;
     padding-bottom: 5px;
     padding-top: 5px;
     border-bottom: 1px solid #e7e7e7;
