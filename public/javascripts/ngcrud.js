@@ -5,7 +5,9 @@ var ngCRUD = {
         $scope.obj_list = [];
 
         // When we load the page, GET the list of objects
-        $http.get(api)
+        $http.get(api, {
+            params: {populate: true}
+          }) // populates refs with full objs
           .success(function(data) {
             $scope.obj_list = data;
             console.log(data);
@@ -31,7 +33,9 @@ var ngCRUD = {
       function($scope, $routeParams, $http) {
         $scope.obj = undefined;
 
-        $http.get(api+'/'+$routeParams.slug)
+        $http.get(api+'/'+$routeParams.slug, {
+            params: {populate: true}
+          }) // populates refs with full objs
           .success(function(data) {
             $scope.obj = data;
             console.log(data);

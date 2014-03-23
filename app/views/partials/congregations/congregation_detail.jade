@@ -3,7 +3,10 @@ include ../addons
 div.detail
   +editdeletebuttons('/{{ obj.slug }}')
   +datum
-    h3 {{ obj.name }}
+    h1 {{ obj.name }}
+  div(ng-showif="{{ obj.parent }}")
+    +datum
+      h2 {{ obj.parent.name }}
   +datum("Website", "obj.website")
     a(href='{{ obj.website }}') {{ obj.website }}
   +multidatum("Phone", "obj.phone")

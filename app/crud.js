@@ -1,3 +1,5 @@
+var url = require('url');
+
 function construct(model, args) {
     function F() {
         return model.apply(this, args);
@@ -7,9 +9,13 @@ function construct(model, args) {
 }
 
 module.exports = {
-  readAll: function(model) {
+  readAll: function(model, pop) {
     return (function(req, res) {
-      model.find().exec(function(err, list) {
+      var found = model.find();
+      console.log("GET QUERY: ",url.parse(req.url, true).query);
+      if(url.parse(req.url, true).query.populate)
+        found = found.populate(pop);
+      found.exec(function(err, list) {
         if(err) {
           next(err);
         } else {
@@ -18,9 +24,13 @@ module.exports = {
       });
     });
   },
-  read: function(model) {
+  read: function(model, pop) {
     return (function(req, res) {
-      model.findOne({slug: req.params.slug}).exec(function(err, obj) {
+      var found = model.findOne({slug: req.params.slug});
+      console.log("GET QUERY: ",url.parse(req.url, true).query);
+      if(url.parse(req.url, true).query.populate)
+        found = found.populate(pop);
+      found.exec(function(err, obj) {
         if(err || obj === null) {
           res.status(404);
           res.send('404');
@@ -39,8 +49,8 @@ module.exports = {
           res.json({error : error });
         } else {
           obj.save(function(error, doc) {
+            console.log("RESPONSE OBJECT: ", doc);
             res.json({obj: doc});
-            console.log("Saved: ",doc)
           });
         }
       });
@@ -55,6 +65,7 @@ module.exports = {
         if(err) {
           throw err;
         } else {
+          console.log("RESPONSE OBJECT: ", doc);
           res.json({obj: doc});
         }
       });

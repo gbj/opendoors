@@ -5,7 +5,7 @@ div.detail
   +datum
     h1 {{ obj.first_name }} {{ obj.last_name }}
   +datum
-    h2 {{ obj.congregation }}
+    h2 ({{ obj.congregation.name }})
   +multidatum("Important Dates", "obj.date")
     {{ obj.value | date }}
   +multidatum("Email", "obj.email")
