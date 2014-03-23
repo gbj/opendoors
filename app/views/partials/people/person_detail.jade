@@ -16,8 +16,6 @@ div.detail
   +multidatum("Phone", "obj.phone")
     a(ng-href='tel:{{ obj.value }}') {{ obj.value }}
   +multidatum("Social Media", "obj.social_media")
-    div(social-media-links="on",
-        socialmediatype="{{ obj.label }}",
-        socialmediavalue="{{ obj.value }}")
+    a(ng-href='http://www.{{ obj.label }}.com/{{ obj.value }}') {{ obj.value }}
   +multidatum("Address", "obj.address")
     +address

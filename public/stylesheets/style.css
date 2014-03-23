@@ -63,7 +63,7 @@ a {
   margin-bottom: 10px;
 }
 
-.form-horizontal input {
+.form-horizontal input, .form-horizontal select {
   margin-bottom: 5px;
 }
 

@@ -14,7 +14,11 @@ div.well(ng-controller="CongregationCreateCtrl")
     {type: 'text', name: 'name', label: "Name", required: true},
     {type: 'text', name: 'color', label: "Color", required: false},
     {type: 'text', name: 'website', label: "Website", required: false},
-    [{type: 'tel', name: 'phone', label: "Phone"}],
-    [{type: 'text', name: 'social_media', label: "Social Media"}],
-    [{type: 'location', name: 'address', label: "Address"}]
+    [{type: 'tel', name: 'phone', label: "Phone", choices: ['Office']}],
+    [{type: 'text', name: 'social_media', label: "Social Media",
+      choices: ['Facebook', 'Twitter']
+    }],
+    [{type: 'location', name: 'address', label: "Address",
+      choices: ['Office', 'Church']
+    }]
   ])

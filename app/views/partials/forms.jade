@@ -5,8 +5,6 @@ mixin valform(name, fields)
         +multipleinput(name, field[0])
       else if field.type === 'scope_select'
         +scope_select(field)
-      else if field.type === 'select'
-        p Select
       else
         +textfield(name, field)
     div.row
@@ -19,7 +17,7 @@ mixin scope_select(field)
       label.control-label(for="#{field.name}") #{field.label}
     div.controls.col-sm-9
       - var requiredf = (required ? required='required' : required='false')
-      select(ng-required=requiredf,
+      select.form-control(ng-required=requiredf,
         ng-model="newObj.#{field.name}",
         name="#{field.name}",
         ng-options="#{field.scope_iterator}")
@@ -35,6 +33,11 @@ mixin input(required, type, name, label, model)
             ng-model='#{model}',
             name='#{name}',
             placeholder="#{label}")
+
+mixin select(name, model, choices)
+  select.form-control(name='#{name}', ng-model='#{model}')
+    each choice in choices
+      option(value="#{choice}") #{choice}
 
 mixin locationfield(required, model, name, fieldname, label)
   div.controls.locationfield
@@ -72,7 +75,8 @@ mixin multipleinput(form, field)
     div.col-sm-5
       +input(field.required, field.type, field.name, field.label, field.name+'.value')
     div.col-sm-4
-      +input(field.required, 'text', field.name, "Label", field.name+'.label')
+      +select(field.name+'_label', field.name+'.label', field.choices)
+      //+input(field.required, 'text', field.name, "Label", field.name+'.label')
     div.col-sm-3
       button.btn.btn-default(type='button',
                              ng-click="newObj.#{field.name}.push({})")
