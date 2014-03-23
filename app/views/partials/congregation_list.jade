@@ -1,7 +1,7 @@
 include addons
 
 h1= title
-p There are {{ obj_list.length }} people.
+p There are {{ obj_list.length }} congregations.
 div.well
   div.row
     div.col-sm-8
@@ -22,22 +22,20 @@ div.well
           th
           th
           th
-          th First Name
-          th Last Name
-          th Email
+          th Name
+          th City
       tbody
-        tr.row(ng-repeat="person in obj_list | filter:search")
+        tr.row(ng-repeat="congregation in obj_list | filter:search")
           td
-            a(ng-click="quickdelete(person.slug)")
+            a(ng-click="quickdelete(congregation.slug)")
               +glyphicon("remove")
           td
-            a(href='/people/{{ person.slug }}/edit')
+            a(href='/people/{{ congregation.slug }}/edit')
               +glyphicon("edit")
           td
-            a(href='/people/{{ person.slug }}')
+            a(href='/people/{{ congregation.slug }}')
               +glyphicon("info-sign")
-          td {{ person.first_name }}
-          td {{ person.last_name }}
+          td {{ congregation.name }}
           td
-            a(href="mailto:{{ person.email[0].value }}")
-              {{ person.email[0].value }}
+            a(href="mailto:{{ congregation.email[0].value }}")
+              {{ congregation.email[0].value }}

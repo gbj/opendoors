@@ -49,6 +49,7 @@ module.exports = {
   update: function(model) {
     return (function(req, res) {
       var obj = req.body;
+      console.log("PUT: ",req.body);
       delete obj._id;
       model.findOneAndUpdate({slug: req.params.slug}, obj, function(err, doc) {
         if(err) {
