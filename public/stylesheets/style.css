@@ -10,3 +10,33 @@ a {
 .editdeletebuttons {
   float: right;
 }
+
+.detail {
+  background-color: #f6f6f6;
+  border: 1px solid #e7e7e7;
+  padding: 10px 30px;
+}
+@media (min-width: 320px) {
+  .detail {
+    margin: 0;
+    padding: 10px 10px;
+  }
+  .editdeletebuttons .label {
+    display: none;
+  }
+}
+.detail ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.detail ul li {
+  margin: 0;
+  padding: 0;
+}
+.detail ul li .badge {
+  margin-left: 5px;
+}
+.detail ul li:last-child {
+  margin-bottom: 10px;
+}

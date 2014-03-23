@@ -38,7 +38,7 @@ mixin editdeletebuttons(base_url)
   div.editdeletebuttons.btn-group.btn-group-sm
     a.btn.btn-primary(type='button', ng-href='#{base_url}/edit')
       +glyphicon("edit")
-      | edit
+      span.label edit
     a.btn.btn-primary(type='button', ng-href='#{base_url}/delete')
       +glyphicon("remove")
-      | delete
+      span.label delete
