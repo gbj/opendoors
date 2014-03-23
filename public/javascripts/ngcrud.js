@@ -1,12 +1,13 @@
 var ngCRUD = {
-  readList: function(api) {
+  readList: function(api, opt) {
     return ['$scope', '$http',
       function ($scope, $http) {
+        var options = opt || {};
         $scope.obj_list = [];
 
         // When we load the page, GET the list of objects
         $http.get(api, {
-            params: {populate: true}
+            params: {populate: options.populate ? options.populate : false}
           }) // populates refs with full objs
           .success(function(data) {
             $scope.obj_list = data;
@@ -28,13 +29,14 @@ var ngCRUD = {
       }
     ];
   },
-  read: function(api) {
+  read: function(api, opt) {
     return ['$scope', '$routeParams', '$http',
       function($scope, $routeParams, $http) {
+        var options = opt || {};
         $scope.obj = undefined;
 
         $http.get(api+'/'+$routeParams.slug, {
-            params: {populate: true}
+            params: {populate: options.populate ? options.populate : false}
           }) // populates refs with full objs
           .success(function(data) {
             $scope.obj = data;

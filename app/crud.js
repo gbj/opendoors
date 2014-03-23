@@ -9,12 +9,13 @@ function construct(model, args) {
 }
 
 module.exports = {
-  readAll: function(model, pop) {
+  readAll: function(model) {
     return (function(req, res) {
       var found = model.find();
       console.log("GET QUERY: ",url.parse(req.url, true).query);
-      if(url.parse(req.url, true).query.populate)
-        found = found.populate(pop);
+      var populate = url.parse(req.url, true).query.populate;
+      if(populate)
+        found = found.populate(populate);
       found.exec(function(err, list) {
         if(err) {
           next(err);
@@ -24,12 +25,13 @@ module.exports = {
       });
     });
   },
-  read: function(model, pop) {
+  read: function(model) {
     return (function(req, res) {
       var found = model.findOne({slug: req.params.slug});
       console.log("GET QUERY: ",url.parse(req.url, true).query);
-      if(url.parse(req.url, true).query.populate)
-        found = found.populate(pop);
+      var populate = url.parse(req.url, true).query.populate;
+      if(populate)
+        found = found.populate(populate);
       found.exec(function(err, obj) {
         if(err || obj === null) {
           res.status(404);

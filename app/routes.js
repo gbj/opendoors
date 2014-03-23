@@ -43,14 +43,14 @@ module.exports = function(app) {
   // URLs
 
   // Backend -- API
-  app.get('/api/people', CRUD.readAll(Person, 'congregation')); // Populates congregation field
+  app.get('/api/people', CRUD.readAll(Person));
   app.post('/api/people', CRUD.create(Person));
-  app.get('/api/people/:slug', CRUD.read(Person, 'congregation')); // Populates congregation field
+  app.get('/api/people/:slug', CRUD.read(Person));
   app.put('/api/people/:slug', CRUD.update(Person));
   app.del('/api/people/:slug', CRUD.delete(Person));
-  app.get('/api/congregation', CRUD.readAll(Congregation, 'parent')); // Populates parent field
+  app.get('/api/congregation', CRUD.readAll(Congregation));
   app.post('/api/congregation', CRUD.create(Congregation));
-  app.get('/api/congregation/:slug', CRUD.read(Congregation, 'parent')); // Populates parent field
+  app.get('/api/congregation/:slug', CRUD.read(Congregation));
   app.put('/api/congregation/:slug', CRUD.update(Congregation));
   app.del('/api/congregation/:slug', CRUD.delete(Congregation));
 

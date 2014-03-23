@@ -1,7 +1,7 @@
 var app = angular.module('opendoors');
 
 app.controller("PersonListCtrl", ngCRUD.readList('/api/people'));
-app.controller("PersonDetailCtrl", ngCRUD.read('/api/people')); // ngCRUD will add slug
+app.controller("PersonDetailCtrl", ngCRUD.read('/api/people', {populate: 'congregation'})); // ngCRUD will add slug
 app.controller("PersonDeleteCtrl", ngCRUD.delete('/api/people', '/people'));
 app.controller("PersonCreateCtrl", ngCRUD.create('/api/people', '/people', {
   newObj: {
