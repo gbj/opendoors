@@ -3,7 +3,6 @@ body {
 }
 
 a {
-  color: #00B7FF;
   cursor: pointer;
 }
 
@@ -17,6 +16,7 @@ a {
 .detail {
   background-color: #f6f6f6;
   border: 1px solid #e7e7e7;
+  border-radius: 4px;
   padding: 10px 10px;
 }
 @media (max-width: 460px) {
