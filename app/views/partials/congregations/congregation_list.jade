@@ -1,45 +1,28 @@
 include ../addons
+include ../addons
 
-h1= title
-p There are {{ obj_list.length }} congregations.
-div.well
+div.list.well
   div.row
-    div.col-sm-8
-      div.btn-toolbar
-        div.btn-group
-          a.btn.btn-primary(href='/congregation/new') New Congregation
-          button.btn.btn-default Import
-          a.btn.btn-default(href='/api/congregation.csv') Export
-    div.col-sm-4
+    div.input-group
+      span.input-group-btn
+        a.btn.btn-primary(href='/congregation/new')
+          +glyphicon("plus")
+          | Add
       input.form-control(type='search',
                          placeholder="Search",
-                         ng-model="search")
-  hr
-  div.table-responsive
-    table.table.table-striped
-      thead
-        tr.row
-          th
-          th
-          th
-          th Name
-          th City
-          th Website
-      tbody
-        tr.row(ng-repeat="congregation in obj_list | filter:search")
-          td
-            a(ng-click="quickdelete(congregation.slug)")
-              +glyphicon("remove")
-          td
-            a(href='/{{ congregation.slug }}/edit')
-              +glyphicon("edit")
-          td
-            a(href='/{{ congregation.slug }}')
-              +glyphicon("info-sign")
-          td {{ congregation.name }}
-          td
-            +address_gmaps("congregation.address[0]")
-              {{ congregation.address[0].city }}
-          td
-            a(href="{{ congregation.website }}")
-              {{ congregation.website }}
+                         ng-model="search")  
+  div.person-list.row(ng-repeat="obj in obj_list | filter:search")
+    div.hidden-xs.col-sm-2
+      a.action(ng-click="quickdelete(obj.slug)")
+        +glyphicon("remove")
+      a.action(href='/{{ obj.slug }}/edit')
+        +glyphicon("edit")
+      a.action(href='/{{ obj.slug }}')
+        +glyphicon("info-sign")
+    div.col-sm-3 {{ obj.name }}
+    div.col-sm-3
+      +address_gmaps("obj.address[0]")
+        {{ obj.address[0].city }}
+    div.col-sm-3
+      a(href="{{ obj.website }}")
+        {{ obj.website }}
