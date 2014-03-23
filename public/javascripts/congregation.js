@@ -3,7 +3,7 @@ var app = angular.module('opendoors');
 app.controller("CongregationListCtrl", ngCRUD.readList('/api/congregation'));
 app.controller("CongregationDetailCtrl", ngCRUD.read('/api/congregation')); // ngCRUD will add slug
 app.controller("CongregationDeleteCtrl", ngCRUD.delete('/api/congregation', '/congregation'));
-app.controller("CongregationCreateCtrl", ngCRUD.create('/api/congregation', '/congregation', {
+app.controller("CongregationCreateCtrl", ngCRUD.create('/api/congregation', '', {
   newObj: {
     parent: null, name: '', phone: [], social_media: [], address: []
   },
@@ -17,10 +17,11 @@ app.controller("CongregationCreateCtrl", ngCRUD.create('/api/congregation', '/co
       });
   },
   preSave: function($scope, $http) {
-    $scope.newObj.congregation = $scope.newObj.congregation._id;
+    if($scope.newObj.parent)
+      $scope.newObj.parent = $scope.newObj.parent._id;
   }
 }));
-app.controller("CongregationUpdateCtrl", ngCRUD.update('/api/congregation', '/', {
+app.controller("CongregationUpdateCtrl", ngCRUD.update('/api/congregation', '', {
   addedScope: function($scope, $http, slug) {
     $http.get('/api/congregation')
       .success(function(data) {
@@ -41,7 +42,7 @@ app.controller("CongregationUpdateCtrl", ngCRUD.update('/api/congregation', '/',
         });
   },
   preSave: function($scope, $http) {
-    if($scope.newObj.congregation)
-      $scope.newObj.congregation = $scope.newObj.congregation._id;
+    if($scope.newObj.parent)
+      $scope.newObj.parent = $scope.newObj.parent._id;
   }
 }));

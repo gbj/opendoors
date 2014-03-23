@@ -7,9 +7,9 @@ div.well
     div.col-sm-8
       div.btn-toolbar
         div.btn-group
-          a.btn.btn-primary(href='/people/new') New User
+          a.btn.btn-primary(href='/congregation/new') New Congregation
           button.btn.btn-default Import
-          a.btn.btn-default(href='/api/people.csv') Export
+          a.btn.btn-default(href='/api/congregation.csv') Export
     div.col-sm-4
       input.form-control(type='search',
                          placeholder="Search",
@@ -24,6 +24,7 @@ div.well
           th
           th Name
           th City
+          th Website
       tbody
         tr.row(ng-repeat="congregation in obj_list | filter:search")
           td
@@ -39,3 +40,6 @@ div.well
           td
             a(href="mailto:{{ congregation.email[0].value }}")
               {{ congregation.email[0].value }}
+          td
+            a(href="{{ congregation.website }}")
+              {{ congregation.website }}

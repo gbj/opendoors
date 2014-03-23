@@ -28,3 +28,12 @@ mixin address
     span {{ obj.street }}
     br
     span {{ obj.city }}, {{ obj.state}}, {{ obj.zip }}
+
+mixin editdeletebuttons(base_url)
+  div.editdeletebuttons.btn-group.btn-group-sm
+    a.btn.btn-primary(type='button', ng-href='#{base_url}/edit')
+      +glyphicon("edit")
+      | edit
+    a.btn.btn-primary(type='button', ng-href='#{base_url}/delete')
+      +glyphicon("remove")
+      | delete

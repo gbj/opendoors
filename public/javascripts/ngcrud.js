@@ -103,7 +103,7 @@ var ngCRUD = {
       function($scope, $routeParams, $http, $location) {
         $scope.obj = undefined;
 
-        $http.get(api+$routeParams.slug)
+        $http.get(api+'/'+$routeParams.slug)
           .success(function(data) {
             $scope.obj = data;
             console.log(data);
