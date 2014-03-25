@@ -1,4 +1,4 @@
-var app = angular.module('opendoors', [])
+var app = angular.module('opendoors', ['mgcrea.ngStrap', 'ngAnimate', 'ngRoute'])
   .config(function($httpProvider) {
   // Authorization -- this will display a login view
   // if we get a 401 error (Unauthorized)
@@ -80,6 +80,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   }]);
 
 app.run(function($rootScope, $route) {
+  $rootScope.accessors = {
+    getId: function(mongo_obj) {
+      return mongo_obj._id;
+    }
+  }
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
       //Change page title, based on Route information
       $rootScope.title = $route.current.title;
