@@ -80,11 +80,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   }]);
 
 app.run(function($rootScope, $route) {
-  $rootScope.accessors = {
-    getId: function(mongo_obj) {
-      return mongo_obj._id;
-    }
-  }
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
       //Change page title, based on Route information
       $rootScope.title = $route.current.title;

@@ -8,7 +8,7 @@ div.well(ng-controller="CongregationUpdateCtrl")
       name: 'parent',
       label: "Parent Congregation",
       scope_variable: "congregations",
-      scope_iterator: "accessors.getId(c) as c.name for c in congregations",
+      scope_iterator: "c.id as c.name for c in congregations",
       required: true,
     },
     {type: 'text', name: 'name', label: "Name", required: true},

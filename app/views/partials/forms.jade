@@ -20,11 +20,21 @@ mixin scope_select(field)
       select.form-control(ng-required=requiredf,
         ng-model="newObj.#{field.name}",
         name="#{field.name}",
-        ng-options="#{field.scope_iterator}")
+        ng-options="#{field.scope_iterator}", bs-select)
 
 mixin input(required, type, name, label, model)
   if type === 'location'
     +location(required, type, name, label, name)
+  if type === 'date'
+    - var requiredf = (required ? required='required' : required='false')
+    input.form-control(ng-required=requiredf,
+          type='#{type}',
+          ng-model='#{model}',
+          name='#{name}',
+          placeholder="#{label}",
+          data-date-format="MM/dd/yyyy",
+          data-max-date="today",
+          bs-datepicker)
   else
     div.controls
       - var requiredf = (required ? required='required' : required='false')
