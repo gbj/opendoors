@@ -53,6 +53,23 @@ module.exports = function(app) {
   app.get('/api/congregation/:slug', CRUD.read(Congregation));
   app.put('/api/congregation/:slug', CRUD.update(Congregation));
   app.del('/api/congregation/:slug', CRUD.delete(Congregation));
+  app.get('/api/congregation/:slug/members', function(req, res) {
+    Congregation.findOne({slug: req.params.slug}).exec(function(err, obj) {
+      if(err || obj === null) {
+        res.status(404);
+        res.send('404');
+      } else {
+        Person.find({congregation: obj.id}).exec(function(err, obj) {
+          if(err || obj === null) {
+            res.status(404);
+            res.send('404');
+          } else {
+            res.json(obj);
+          }
+        });
+      }
+    });
+  });
 
   // Frontend -- Client
   // Jade partials

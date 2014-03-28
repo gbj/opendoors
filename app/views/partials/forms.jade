@@ -45,7 +45,8 @@ mixin input(required, type, name, label, model)
             placeholder="#{label}")
 
 mixin select(name, model, choices)
-  select.form-control(name='#{name}', ng-model='#{model}')
+  select.form-control(name='#{name}',
+                      ng-model='#{model}')
     each choice in choices
       option(value="#{choice}") #{choice}
 
