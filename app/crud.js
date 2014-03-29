@@ -7,15 +7,22 @@ function construct(model, args) {
     F.prototype = model.prototype;
     return new F();
 }
+function populate(found_init, pop_string) {
+  var found = found_init;
+  var populates = pop_string.split(',');
+  if(populates.length > 0) {
+    for(var ii in populates) {
+      found = found.populate(populates[ii])
+    }
+  }
+  return found;
+}
 
 module.exports = {
   readAll: function(model) {
     return (function(req, res) {
-      var found = model.find();
-      console.log("GET QUERY: ",url.parse(req.url, true).query);
-      var populate = url.parse(req.url, true).query.populate;
-      if(populate)
-        found = found.populate(populate);
+      var populates = url.parse(req.url, true).query.populate || '';
+      var found = populate(model.find(), populates);
       found.exec(function(err, list) {
         if(err) {
           next(err);
@@ -27,11 +34,8 @@ module.exports = {
   },
   read: function(model) {
     return (function(req, res) {
-      var found = model.findOne({slug: req.params.slug});
-      console.log("GET QUERY: ",url.parse(req.url, true).query);
-      var populate = url.parse(req.url, true).query.populate;
-      if(populate)
-        found = found.populate(populate);
+      var populates = url.parse(req.url, true).query.populate || '';
+      var found = populate(model.findOne({slug: req.params.slug}), populates);
       found.exec(function(err, obj) {
         if(err || obj === null) {
           res.status(404);
