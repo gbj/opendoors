@@ -47,24 +47,23 @@ personSchema.virtual('name').get(function () {
 });
 personSchema.virtual('age').get(function() {
   var birthday = null;
+  var obj = {age: null, formatted: null};
+  var now = moment();
   for(var ii in this.date) {
     var date = this.date[ii];
-    if(date.label === "Birthday" || date.label === "birthday") {
+    if(date.label === "Birthday") {
       birthday = moment(date.value);
     }
   }
   if(birthday) {
-    var now = moment();
-    var age = now.diff(birthday, 'years');
-    if(age < 2) {
-      age = now.diff(birthday, 'months')+' months old';
-    } else {
-      age = age+' years old';
-    }
-    return age;
-  } else {
-    return null;
+    obj.age = now.diff(birthday, 'years');
   }
+  if(obj.age < 2) {
+    obj.formatted = now.diff(birthday, 'months')+' months old';
+  } else {
+    obj.formatted = obj.age+' years old';
+  }
+  return obj;
 });
 slugs.enhanceSchema(personSchema, {
   source: 'name'

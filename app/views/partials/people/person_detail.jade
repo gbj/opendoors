@@ -6,9 +6,9 @@ div.detail
     h1 {{ obj.first_name }} {{ obj.last_name }}
   +datum
     h2 ({{ obj.congregation.name }})
-  div(ng-showif="obj.age")
+  div(ng-showif="obj.age.age")
     +datum
-      h3 {{ obj.age }}
+      h3 {{ obj.age.formatted }}
   +multidatum("Important Dates", "obj.date")
     {{ obj.value | date }} 
   +multidatum("Email", "obj.email")
