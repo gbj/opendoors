@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 var moment = require('moment');
 moment().format();
 
+// Person model
 var personSchema = new mongoose.Schema({
   congregation: {
     type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +39,10 @@ var personSchema = new mongoose.Schema({
     state: String,
     zip: String
   }],
+  relationships: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Relationship',
+  }]
 }, {
   toJSON: {virtuals: true},
   toObject: {virtuals: true}
@@ -69,7 +74,26 @@ slugs.enhanceSchema(personSchema, {
   source: 'name'
 })
 
-// Register the model
-var Person = mongoose.model('Person', personSchema);
+// Relationship model
+var relationshipSchema = new mongoose.Schema({
+  person_a: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Person',
+    required: true
+  },
+  person_b: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Person',
+    required: true
+  },
+  label: {type: String, required: true}
+});
+
+// Register the models
+var Person = mongoose.model('Person', personSchema),
+    Relationship = mongoose.model('Relationship', relationshipSchema);
 slugs.enhanceModel(Person, {});
-module.exports = Person;
+module.exports = {
+  Person: Person,
+  Relationship: Relationship
+};
