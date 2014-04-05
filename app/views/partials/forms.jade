@@ -4,28 +4,31 @@ mixin valform(name, fields)
       if field instanceof Array
         +multipleinput(name, field[0])
       else if field.type === 'scope_select'
-        +scope_select(field)
+        +scope_select_labeled(field.required, 'newObj.'+field.name, field.name, field.label, field.scope_iterator)
       else
         +textfield(name, field)
     div.row
       div.col-sm-6
         button.btn.btn-primary(type='submit') Submit
 
-mixin scope_select(field)
+mixin scope_select_labeled(required, model, name, label, scope_iterator)
   div.row.form-group
     div.col-sm-3
-      label.control-label(for="#{field.name}") #{field.label}
+      label.control-label(for="#{name}") #{label}
     div.controls.col-sm-9
-      - var requiredf = (required ? required='required' : required='false')
-      select.form-control(ng-required=requiredf,
-        ng-model="newObj.#{field.name}",
-        name="#{field.name}",
-        ng-options="#{field.scope_iterator}", bs-select)
+      +scope_select(required, model, name, label, scope_iterator)
+
+mixin scope_select(required, model, name, label, scope_iterator)
+  - var requiredf = (required ? required='required' : required='false')
+  select.form-control(ng-required=requiredf,
+    ng-model="#{model}",
+    name="#{name}",
+    ng-options="#{scope_iterator}", bs-select)
 
 mixin input(required, type, name, label, model)
   if type === 'location'
     +location(required, type, name, label, name)
-  if type === 'date'
+  else if type === 'date'
     - var requiredf = (required ? required='required' : required='false')
     input.form-control(ng-required=requiredf,
           type='#{type}',
@@ -83,11 +86,18 @@ mixin multipleinput(form, field)
                              ng-show="newObj.#{field.name}.length == 0")
         | Add #{field.label}
   div.row.form-group(ng-repeat="#{field.name} in newObj.#{field.name}")
-    div.col-sm-5
-      +input(field.required, field.type, field.name, field.label, field.name+'.value')
-    div.col-sm-4
-      +select(field.name+'_label', field.name+'.label', field.choices)
-      //+input(field.required, 'text', field.name, "Label", field.name+'.label')
+    if field.type === 'relationship'
+      div.col-sm-3
+        +scope_select(field.required, field.name+'.person_a', field.name+'.person_a', field.label, field.scope_iterator)
+      div.col-sm-3
+        +select(field.name+'_label', field.name+'.type', field.choices)
+      div.col-sm-3
+        +scope_select(field.required, field.name+'.person_b', field.name+'.person_b', field.label, field.scope_iterator)
+    else
+      div.col-sm-5
+        +input(field.required, field.type, field.name, field.label, field.name+'.value')
+      div.col-sm-4
+        +select(field.name+'_label', field.name+'.label', field.choices)
     div.col-sm-3
       button.btn.btn-default(type='button',
                              ng-click="newObj.#{field.name}.push({})")
