@@ -32,7 +32,7 @@ mixin address
   +address_gmaps("obj")
     span {{ obj.street }}
     br
-    span {{ obj.city }}, {{ obj.state}}, {{ obj.zip }}
+    span {{ obj.city }}, {{ obj.state}} {{ obj.zip }}
 
 mixin editdeletebuttons(base_url)
   div.editdeletebuttons.btn-group.btn-group-sm

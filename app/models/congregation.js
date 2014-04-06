@@ -20,8 +20,12 @@ var congregationSchema = new mongoose.Schema({
     street: {type: String, required: true},
     city: {type: String, required: true},
     state: String,
-    zip: String
+    zip: String,
   }],
+  rooms: [{
+    label: {type: String, required: true},
+    value: {type: String, required: true},
+  }]
 }, {
   toJSON: {virtuals: true},
   toObject: {virtuals: true}

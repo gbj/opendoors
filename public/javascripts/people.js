@@ -15,13 +15,30 @@ app.controller("PersonCreateCtrl", ngCRUD.create('/api/people', '/people', {
       .error(function(data) {
         console.log("Error: ", data);
       });
+
+    $http.get('/api/people')
+      .success(function(data) {
+        $scope.people = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
   }
 }));
+
 app.controller("PersonUpdateCtrl", ngCRUD.update('/api/people', '/people', {
   addedScope: function($scope, $http, slug) {
     $http.get('/api/congregation')
       .success(function(data) {
         $scope.congregations = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+
+    $http.get('/api/people')
+      .success(function(data) {
+        $scope.people = data;
       })
       .error(function(data) {
         console.log("Error: ", data);

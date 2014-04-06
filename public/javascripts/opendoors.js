@@ -25,6 +25,7 @@ var app = angular.module('opendoors', ['mgcrea.ngStrap', 'ngAnimate', 'ngRoute']
 app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
+      .when('/404', {templateUrl: '/partials/404', title: "Oh no!"})
       .when('/people', {
         templateUrl: '/partials/people/person_list',
         controller: "PersonListCtrl",

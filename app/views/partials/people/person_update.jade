@@ -27,5 +27,9 @@ div.well(ng-controller="PersonUpdateCtrl")
     }],
     [{type: 'location', name: 'address', label: "Address",
       choices: ['Home', 'Office']
+    }],
+    [{type: 'relationship', name: 'relationships', label: "Relationships",
+      scope_variable: "people", scope_iterator: "p.id as p.name for p in people",
+      choices: ['Friend', 'Parent', 'Sibling', 'Dating', 'Partner', 'Spouse']
     }]
   ])

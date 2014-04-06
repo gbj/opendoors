@@ -1,5 +1,7 @@
 var CRUD = require('./crud'),
-    Person = require('./models/person'),
+    people = require('./models/person'),
+    Person = people.Person,
+    Relationship = people.Relationship,
     Congregation = require('./models/congregation');
 
 module.exports = function(app) {
@@ -41,6 +43,7 @@ module.exports = function(app) {
   });
 
   // URLs
+  
 
   // Backend -- API
   app.get('/api/people', CRUD.readAll(Person));
@@ -48,6 +51,27 @@ module.exports = function(app) {
   app.get('/api/people/:slug', CRUD.read(Person));
   app.put('/api/people/:slug', CRUD.update(Person));
   app.del('/api/people/:slug', CRUD.delete(Person));
+  app.get('/api/people/:slug/relationships', function(req, res) {
+    Person.findOne({slug: req.params.slug}).exec(function(err, obj) {
+      if(err || obj === null) {
+        res.status(404);
+        res.send('404');
+      } else {
+        obj.relationships(function(err, relationships) {
+          if(err) {
+            res.status(404);
+            res.send('404');
+          } else {
+            return res.json(relationships);
+          }
+        });
+      }
+    });
+  });
+  app.post('/api/people/relationships', CRUD.create(Relationship));
+  app.del('/api/people/relationships/:slug', CRUD.delete(Relationship));
+  app.put('/api/people/relationships/:slug', CRUD.update(Relationship));
+
   app.get('/api/congregation', CRUD.readAll(Congregation));
   app.post('/api/congregation', CRUD.create(Congregation));
   app.get('/api/congregation/:slug', CRUD.read(Congregation));

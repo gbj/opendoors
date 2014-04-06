@@ -1,15 +1,18 @@
 mixin valform(name, fields)
   form.form-horizontal(name="#{name}", ng-submit="save(#{name})", role="form")
     each field in fields
-      if field instanceof Array
-        +multipleinput(name, field[0])
-      else if field.type === 'scope_select'
-        +scope_select_labeled(field.required, 'newObj.'+field.name, field.name, field.label, field.scope_iterator)
-      else
-        +textfield(name, field)
+      +build_field(name, field)
     div.row
       div.col-sm-6
         button.btn.btn-primary(type='submit') Submit
+
+mixin build_field(name, field)
+  if field instanceof Array
+    +multipleinput(name, field[0])
+  else if field.type === 'scope_select'
+    +scope_select_labeled(field.required, 'newObj.'+field.name, field.name, field.label, field.scope_iterator)
+  else
+    +textfield(name, field)
 
 mixin scope_select_labeled(required, model, name, label, scope_iterator)
   div.row.form-group
@@ -76,14 +79,14 @@ mixin textfield(form, field)
       +input(field.required, field.type, field.name, field.label, 'newObj.'+field.name)
 
 mixin multipleinput(form, field)
-  div.row.form-group
+  div.row.form-group.multiple
     div.col-sm-6
       label.control-label(for="#{field.name}_{{$index+1}}") #{field.label}
   div.row
     div.col-sm-6
       button.btn.btn-default(type='button',
                              ng-click="newObj.#{field.name}.push({})",
-                             ng-show="newObj.#{field.name}.length == 0")
+                             ng-show="!newObj.#{field.name} || newObj.#{field.name}.length == 0")
         | Add #{field.label}
   div.row.form-group(ng-repeat="#{field.name} in newObj.#{field.name}")
     if field.type === 'relationship'
@@ -96,8 +99,9 @@ mixin multipleinput(form, field)
     else
       div.col-sm-5
         +input(field.required, field.type, field.name, field.label, field.name+'.value')
-      div.col-sm-4
-        +select(field.name+'_label', field.name+'.label', field.choices)
+      if field.choices
+        div.col-sm-4
+          +select(field.name+'_label', field.name+'.label', field.choices)
     div.col-sm-3
       button.btn.btn-default(type='button',
                              ng-click="newObj.#{field.name}.push({})")

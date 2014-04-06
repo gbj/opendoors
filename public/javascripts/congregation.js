@@ -1,5 +1,6 @@
 var app = angular.module('opendoors');
 
+// Congregations
 app.controller("CongregationListCtrl", ngCRUD.readList('/api/congregation'));
 app.controller("CongregationDetailCtrl", ngCRUD.read('/api/congregation', {populate: 'parent'})); // ngCRUD will add slug
 app.controller("CongregationDeleteCtrl", ngCRUD.delete('/api/congregation', '/congregation'));

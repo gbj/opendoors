@@ -38,10 +38,6 @@ var personSchema = new mongoose.Schema({
     city: {type: String, required: true},
     state: String,
     zip: String
-  }],
-  relationships: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Relationship',
   }]
 }, {
   toJSON: {virtuals: true},
@@ -70,6 +66,11 @@ personSchema.virtual('age').get(function() {
   }
   return obj;
 });
+personSchema.method('relationships', function(cb) {
+  Relationship.find({$or:[{person_a: this}, {person_b: this}]}, function(err, list) {
+    cb(err, list);
+  })
+});
 slugs.enhanceSchema(personSchema, {
   source: 'name'
 })
@@ -86,7 +87,7 @@ var relationshipSchema = new mongoose.Schema({
     ref: 'Person',
     required: true
   },
-  label: {type: String, required: true}
+  type: {type: String, required: true}
 });
 
 // Register the models

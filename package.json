@@ -15,6 +15,7 @@
 		"mongoose": "~3.8.8",
 		"mongoose-uniqueslugs": "~0.0.4",
 		"passport": "~0.2.0",
-		"passport-local": "~1.0.0"
+		"passport-local": "~1.0.0",
+		"forms-angular": "~0.2.4"
   }
 }

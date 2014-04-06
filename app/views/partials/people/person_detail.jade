@@ -19,3 +19,5 @@ div.detail
     a(ng-href='http://www.{{ obj.label }}.com/{{ obj.value }}') {{ obj.value }}
   +multidatum("Address", "obj.address")
     +address
+  +multidatum("Relationships", "obj.relationships")
+    {{ obj.person_a.name }} = {{ obj.type }} = {{ obj.person_b.name }}
