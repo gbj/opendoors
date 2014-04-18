@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "directory": "public/components",
   "dependencies": {
-    "angular-strap": "~2.0.0"
+    "angular-strap": "~2.0.0",
+    "angular-ui-calendar": "latest"
+  },
+  "resolutions": {
+    "jquery": "~2.x"
   }
 }
