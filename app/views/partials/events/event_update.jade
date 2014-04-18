@@ -1,0 +1,38 @@
+include ../addons
+include ../forms
+
+div.well(ng-controller="EventUpdateCtrl")
+  +valform('eventUpdateForm', [
+    {
+      type: 'scope_select',
+      name: 'congregation',
+      label: "Congregation",
+      scope_variable: "congregations",
+      scope_iterator: "c.id as c.name for c in congregations",
+      required: true,
+    },
+    {
+      type: 'scope_select',
+      name: 'host',
+      label: "Host",
+      scope_variable: "people",
+      scope_iterator: "p.id as p.name for p in people",
+      required: true,
+    },
+    {type: 'text', name: 'name', label: "Name", required: true},
+    {type: 'select', name: 'event_type', label: "Type",
+      options: ['Worship', 'Social', 'Pastoral', 'Meeting']
+    },
+    {type: 'select', name: 'permission', label: "Permissions",
+      options: ['Private', 'Congregation', 'Public']
+    },
+    {
+      type: 'scope_select', name: 'room', label: "Room",
+      scope_variable: "newObj.congregation",
+      scope_iterator: "room in newObj.congregation.rooms"
+    },
+    {type: 'text', name: 'desc', label: "Description"},
+    {type: 'datetime', name: 'start', label: "Start Time"},
+    {type: 'datetime', name: 'end', label: "End Time"},
+    {type: 'text', name: 'rrule', label: "Event Recurrences"}
+  ])

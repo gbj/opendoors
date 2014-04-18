@@ -4,4 +4,4 @@ div.well(ng-controller="PersonDeleteCtrl")
   p Are you sure you want to delete {{ obj.name }}?
   form.form-horizontal(name="personDelForm", ng-submit="del(personDelForm)")
     button.btn.btn-default(type='submit') Yes
-    a.btn.btn-default(href='/people') No
+    a.btn.btn-default(ng-href='/people/{{ person.slug}}') No

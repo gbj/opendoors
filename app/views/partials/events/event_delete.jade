@@ -1,0 +1,7 @@
+include ../addons
+
+div.well(ng-controller="EventDeleteCtrl")
+  p Are you sure you want to delete {{ obj.name }}?
+  form.form-horizontal(name="personDelForm", ng-submit="del(eventDelForm)")
+    button.btn.btn-default(type='submit') Yes
+    a.btn.btn-default(ng-href='/event/{{ obj.slug }}') No

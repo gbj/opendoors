@@ -1,0 +1,9 @@
+include ../addons
+
+div.list.well
+  div.row
+    div.col-xs-12
+      a.btn.btn-primary(href='/event/new')
+        +glyphicon("plus")
+        | Add
+  div.row(ui-calendar, ng-model="eventSources") 

@@ -1,4 +1,4 @@
-var app = angular.module('opendoors', ['mgcrea.ngStrap', 'ngAnimate', 'ngRoute'])
+var app = angular.module('opendoors', ['mgcrea.ngStrap', 'ngAnimate', 'ngRoute', 'ui.calendar'])
   .config(function($httpProvider) {
   // Authorization -- this will display a login view
   // if we get a 401 error (Unauthorized)
@@ -50,6 +50,31 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         templateUrl: '/partials/people/person_delete',
         controller: "PersonDeleteCtrl",
         title: "Delete a Person"
+      })
+      .when('/event', {
+        templateUrl: '/partials/events/event_list',
+        controller: "EventListCtrl",
+        title: "Events"
+      })
+      .when('/event/new', {
+        templateUrl: '/partials/events/event_create',
+        controller: "EventCreateCtrl",
+        title: "Add an Event"
+      })
+      .when('/event/:slug', {
+        templateUrl: '/partials/events/event_detail',
+        controller: "EventDetailCtrl",
+        title: "Events"
+      })
+      .when('/event/:slug/edit', {
+        templateUrl: '/partials/events/event_update',
+        controller: "EventUpdateCtrl",
+        title: "Edit an Event"
+      })
+      .when('/event/:slug/delete', {
+        templateUrl: '/partials/events/event_delete',
+        controller: "EventDeleteCtrl",
+        title: "Delete an Event"
       })
       .when('/congregation', {
         templateUrl: '/partials/congregations/congregation_list',

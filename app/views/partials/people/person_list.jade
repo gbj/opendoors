@@ -21,7 +21,8 @@ div.list.well
         +glyphicon("info-sign")
     div.col-sm-2.hidden-xs {{ person.first_name }}
     div.col-sm-2.hidden-xs {{ person.last_name }}
-    div.col-sm-3.visible-xs {{ person.name }}
+    div.col-sm-3.visible-xs
+      a(href='/people/{{ person.slug }}') {{ person.name }}
     div.col-sm-3
       a(href="mailto:{{ person.email[0].value }}")
         {{ person.email[0].value }}

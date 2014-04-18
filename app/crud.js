@@ -9,7 +9,10 @@ function construct(model, args) {
 }
 function populate(found_init, pop_string) {
   var found = found_init;
-  var populates = pop_string.split(',');
+  var populates = pop_string;
+  if(typeof pop_string === "string") {
+    populates = pop_string.split(',');
+  }
   if(populates.length > 0) {
     for(var ii in populates) {
       found = found.populate(populates[ii])

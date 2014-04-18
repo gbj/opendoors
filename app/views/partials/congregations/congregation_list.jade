@@ -20,7 +20,8 @@ div.list.well
         +glyphicon("edit")
       a.action(href='/{{ obj.slug }}')
         +glyphicon("info-sign")
-    div.col-sm-4 {{ obj.name }}
+    div.col-sm-4
+      a(href='/{{ obj.slug }}') {{ obj.name }}
     div.col-sm-2
       +address_gmaps("obj.address[0]")
         {{ obj.address[0].city }}

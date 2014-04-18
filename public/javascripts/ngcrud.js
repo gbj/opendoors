@@ -10,8 +10,11 @@ var ngCRUD = {
             params: {populate: options.populate ? options.populate : false}
           }) // populates refs with full objs
           .success(function(data) {
-            $scope.obj_list = data;
-            console.log(data);
+            if(options.callback) {
+              $scope.obj_list = options.callback(data);
+            } else {
+              $scope.obj_list = data;
+            }
           })
           .error(function(data) {
             console.log('Error: ', data);

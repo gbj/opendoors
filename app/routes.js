@@ -2,7 +2,8 @@ var CRUD = require('./crud'),
     people = require('./models/person'),
     Person = people.Person,
     Relationship = people.Relationship,
-    Congregation = require('./models/congregation');
+    Congregation = require('./models/congregation'),
+    Event = require('./models/event');
 
 module.exports = function(app) {
   // API
@@ -94,6 +95,12 @@ module.exports = function(app) {
       }
     });
   });
+
+  app.get('/api/event', CRUD.readAll(Event));
+  app.post('/api/event', CRUD.create(Event));
+  app.get('/api/event/:slug', CRUD.read(Event));
+  app.put('/api/event/:slug', CRUD.update(Event));
+  app.del('/api/event/:slug', CRUD.delete(Event));
 
   // Frontend -- Client
   // Jade partials

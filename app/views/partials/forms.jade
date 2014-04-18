@@ -28,7 +28,7 @@ mixin scope_select(required, model, name, label, scope_iterator)
     name="#{name}",
     ng-options="#{scope_iterator}", bs-select)
 
-mixin input(required, type, name, label, model)
+mixin input(required, type, name, label, model, options)
   if type === 'location'
     +location(required, type, name, label, name)
   else if type === 'date'
@@ -39,8 +39,27 @@ mixin input(required, type, name, label, model)
           name='#{name}',
           placeholder="#{label}",
           data-date-format="MM/dd/yyyy",
-          data-max-date="today",
           bs-datepicker)
+  else if type === 'datetime'
+    - var requiredf = (required ? required='required' : required='false')
+    div.col-sm-6
+      input.form-control(ng-required=requiredf,
+            type='date',
+            ng-model='#{model}',
+            name='#{name}',
+            placeholder="Date",
+            data-date-format="MM/dd/yyyy",
+            bs-datepicker)
+    div.col-sm-6
+      input.form-control(ng-required=requiredf,
+            type='time',
+            ng-model='#{model}',
+            name='#{name}',
+            placeholder="Time",
+            data-time-format="h:mma",
+            bs-timepicker)
+  else if type === 'select'
+    +select(name, model, options)
   else
     div.controls
       - var requiredf = (required ? required='required' : required='false')
@@ -76,7 +95,7 @@ mixin textfield(form, field)
     div.col-sm-3
       label.control-label(for="#{field.name}") #{field.label}
     div.col-sm-9
-      +input(field.required, field.type, field.name, field.label, 'newObj.'+field.name)
+      +input(field.required, field.type, field.name, field.label, 'newObj.'+field.name, field.options)
 
 mixin multipleinput(form, field)
   div.row.form-group.multiple

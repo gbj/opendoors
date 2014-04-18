@@ -1,0 +1,16 @@
+include ../addons
+
+div.detail
+  +editdeletebuttons('/event/{{ obj.slug }}')
+  +datum
+    h1 {{ obj.name }}
+  +datum
+    h2 ({{ obj.congregation.name }})
+  +datum
+    span {{ obj.start | date:"MMMM d, h:mma" }}&ndash;{{ obj.end | date:"h:mma" }}
+  +datum("Host")
+    a(href="/people/{{ obj.host.slug }}") {{ obj.host.name }}
+  +datum("Location")
+    {{ obj.room }}
+  +datum
+    p(style="font-style: italic") {{ obj.desc }}
