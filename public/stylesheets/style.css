@@ -103,3 +103,7 @@ a {
 .form-horizontal .btn-primary {
   margin-top: 5px;
 }
+
+.datepicker a, .datepicker button, .timepicker a, .timepicker button {
+  border: 0px;
+}
