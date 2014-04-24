@@ -2,26 +2,9 @@ var app = angular.module('opendoors');
 
 app.controller("EventListCtrl", ['$scope', '$http', '$filter',
   function ($scope, $http, $filter) {
-    $scope.obj_list = [];
-    $scope.eventSources = [$scope.obj_list];
-
-    // When we load the page, GET the list of events
-    $http.get('/api/event')
-      .success(function(data) {
-        for(var ii in data) {
-          var obj = data[ii];
-          $scope.obj_list.push({
-            id: obj.id,
-            title: obj.name,
-            url: '/event/'+obj.slug,
-            start: new Date(obj.start),
-            end: new Date(obj.end)
-          })
-        }
-      })
-      .error(function(data) {
-        console.log('Error: ', data);
-      });
+    $scope.eventSources = [{
+      url: '/api/event.fullcalendar.json'
+    }];
   }
 ]);
 app.controller("EventDetailCtrl", ngCRUD.read('/api/event', {

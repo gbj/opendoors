@@ -28,6 +28,17 @@ mixin scope_select(required, model, name, label, scope_iterator)
     name="#{name}",
     ng-options="#{scope_iterator}", bs-select)
 
+mixin rrule(name, model)
+  div.col-sm-3
+    label(for='rrule.interval') Every
+    input.form-control(type='text', name='rrule.interval', value='1', ng-model='newObj.rrule.interval')
+  div.col-sm-3
+    label(for='rrule.freq') (frequency)
+    +select('rrule.freq', 'newObj.rrule.freq', [{value: 2, label: "weeks"}, {value: 3, label: "days"}, {value: 1, label: "months"}])
+  div.col-sm-6
+    label(for='rrule.until') until
+    +input(false, 'date', 'rrule.until', "until", 'newObj.rrule.until', {})
+
 mixin input(required, type, name, label, model, options)
   if type === 'location'
     +location(required, type, name, label, name)
@@ -58,6 +69,8 @@ mixin input(required, type, name, label, model, options)
             placeholder="Time",
             data-time-format="h:mma",
             bs-timepicker)
+  else if type === 'rrule'
+    +rrule(name, model)
   else if type === 'select'
     +select(name, model, options)
   else
@@ -73,7 +86,10 @@ mixin select(name, model, choices)
   select.form-control(name='#{name}',
                       ng-model='#{model}')
     each choice in choices
-      option(value="#{choice}") #{choice}
+      if choice.value
+        option(value="#{choice.value}") #{choice.label}
+      else
+        option(value="#{choice}") #{choice}
 
 mixin locationfield(required, model, name, fieldname, label)
   div.controls.locationfield

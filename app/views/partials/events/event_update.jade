@@ -26,13 +26,13 @@ div.well(ng-controller="EventUpdateCtrl")
     {type: 'select', name: 'permission', label: "Permissions",
       options: ['Private', 'Congregation', 'Public']
     },
-    {
-      type: 'scope_select', name: 'room', label: "Room",
-      scope_variable: "newObj.congregation",
-      scope_iterator: "room in newObj.congregation.rooms"
-    },
+//    {
+//      type: 'scope_select', name: 'room', label: "Room",
+//      scope_variable: "newObj.congregation",
+//      scope_iterator: "room in newObj.congregation.rooms"
+//    },
     {type: 'text', name: 'desc', label: "Description"},
     {type: 'datetime', name: 'start', label: "Start Time"},
     {type: 'datetime', name: 'end', label: "End Time"},
-    {type: 'text', name: 'rrule', label: "Event Recurrences"}
+    {type: 'rrule', name: 'rrule', label: "Event Recurrences"}
   ])

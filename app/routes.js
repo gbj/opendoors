@@ -1,4 +1,5 @@
-var CRUD = require('./crud'),
+var url = require('url'),
+    CRUD = require('./crud'),
     people = require('./models/person'),
     Person = people.Person,
     Relationship = people.Relationship,
@@ -97,6 +98,28 @@ module.exports = function(app) {
   });
 
   app.get('/api/event', CRUD.readAll(Event));
+  app.get('/api/event.fullcalendar.json', function(req, res) {
+    var start = new Date(parseInt(url.parse(req.url, true).query.start)*1000), // from timestamp in seconds to milliseconds
+        end = new Date(parseInt(url.parse(req.url, true).query.end)*1000); // from timestamp in seconds to milliseconds
+    var events = [];
+    Event.find(function(err, list) {
+      for(var ii in list) {
+        var obj = list[ii],
+            occ = obj.occurrences(start, end);
+        for(var jj in occ) {
+          var o = occ[jj];
+          events.push({
+            id: o.slug,
+            title: o.name,
+            url: '/event/'+o.slug,
+            start: o.start,
+            end: o.end
+          });
+        }
+      }
+      res.json(events);
+    });
+  })
   app.post('/api/event', CRUD.create(Event));
   app.get('/api/event/:slug', CRUD.read(Event));
   app.put('/api/event/:slug', CRUD.update(Event));
