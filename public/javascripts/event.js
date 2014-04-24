@@ -17,6 +17,16 @@ app.controller("EventCreateCtrl", ngCRUD.create('/api/event', '/event', {
     end: new Date(new Date().setTime(new Date().getTime() + (60*60*1000))).setMinutes(0)
   },
   addedScope: function($scope, $http) {
+    $scope.$watch(
+      "newObj.start",
+      function(newValue, oldValue) {
+        if(oldValue) {
+          var diff = new Date($scope.newObj.end) - new Date(oldValue);
+          $scope.newObj.end = new Date(new Date(newValue).getTime()+diff);
+        }
+      }
+    );
+
     $http.get('/api/congregation')
       .success(function(data) {
         $scope.congregations = data;
@@ -37,6 +47,16 @@ app.controller("EventCreateCtrl", ngCRUD.create('/api/event', '/event', {
 
 app.controller("EventUpdateCtrl", ngCRUD.update('/api/event', '/event', {
   addedScope: function($scope, $http, slug) {
+    $scope.$watch(
+      "newObj.start",
+      function(newValue, oldValue) {
+        if(oldValue) {
+          var diff = new Date($scope.newObj.end) - new Date(oldValue);
+          $scope.newObj.end = new Date(new Date(newValue).getTime()+diff);
+        }
+      }
+    );
+
     $http.get('/api/congregation')
       .success(function(data) {
         $scope.congregations = data;
