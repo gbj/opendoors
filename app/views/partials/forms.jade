@@ -1,47 +1,91 @@
+//- valform is the basic entryway into forms.jade
 mixin valform(name, fields)
+  //- .form-horizontal is a Bootstrap 3 style
+  //- We assume that there is an AngularJS function $scope.save() that will save the form
   form.form-horizontal(name="#{name}", ng-submit="save(#{name})", role="form")
+
+    //- Build form
     each field in fields
       +build_field(name, field)
+
+    //- Submit button framing
     div.row
       div.col-sm-6
         button.btn.btn-primary(type='submit') Submit
 
-mixin build_field(name, field)
-  if field instanceof Array
-    +multipleinput(name, field[0])
-  else if field.type === 'scope_select'
-    +scope_select_labeled(field.required, 'newObj.'+field.name, field.name, field.label, field.scope_iterator)
-  else
-    +textfield(name, field)
 
-mixin scope_select_labeled(required, model, name, label, scope_iterator)
+mixin label_frame(name, label)
   div.row.form-group
     div.col-sm-3
       label.control-label(for="#{name}") #{label}
     div.controls.col-sm-9
-      +scope_select(required, model, name, label, scope_iterator)
+      if block
+        block
 
-mixin scope_select(required, model, name, label, scope_iterator)
-  - var requiredf = (required ? required='required' : required='false')
+mixin build_field(name, field)
+  //- Call function for the correct field type
+  if field instanceof Array
+    +multipleinput(field[0])
+  else if field.type === 'scope_select'
+    +label_frame(field.name, field.label)
+      +scope_select(field)
+  else
+    +label_frame(field.name, field.label)
+      +input(field.required, field.type, field.name, field.label, 'newObj.'+field.name, field.options)
+
+//- multipleinput() provides a form view that is maps onto a Mongoose [] field
+mixin multipleinput(field)
+  div.row.form-group.multiple
+    div.col-sm-6
+      label.control-label(for="#{field.name}_{{$index+1}}") #{field.label}
+  div.row
+    div.col-sm-6
+      button.btn.btn-default(type='button',
+                             ng-click="newObj.#{field.name}.push({})",
+                             ng-show="!newObj.#{field.name} || newObj.#{field.name}.length == 0")
+        | Add #{field.label}
+  div.row.form-group(ng-repeat="#{field.name} in newObj.#{field.name}")
+    if field.type === 'relationship'
+      - var base_name = field.name
+      div.col-sm-3
+        - field['name'] = base_name+'.person_a'
+        +scope_select(field)
+      div.col-sm-3
+        - field['name'] = base_name+'.person_b'
+        +select(field.name+'_label', field.name+'.type', field.choices)
+      div.col-sm-3
+        +scope_select(field)
+    else
+      div.col-sm-5
+        +input(field.required, field.type, field.name, field.label, field.name+'.value')
+      if field.choices
+        div.col-sm-4
+          +select(field.name+'_label', field.name+'.label', field.choices)
+    div.col-sm-3
+      button.btn.btn-default(type='button',
+                             ng-click="newObj.#{field.name}.push({})")
+        +glyphicon("plus")
+      button.btn.btn-default(type='button',
+                             ng-click="newObj.#{field.name}.splice($index, 1)")
+        +glyphicon("remove")
+
+//- scope_select() builds a SELECT input that draws its values from $scope, as specified in field.scope_iterator
+mixin scope_select(field)
+  - var requiredf = (field.required ? required='required' : required='false')
   select.form-control(ng-required=requiredf,
-    ng-model="#{model}",
-    name="#{name}",
-    ng-options="#{scope_iterator}", bs-select)
+    ng-model="newObj."+field.name,
+    name="#{field.name}",
+    ng-options="#{field.scope_iterator}", bs-select)
 
-mixin rrule(name, model)
-  div.col-sm-3
-    label(for='rrule.interval') Every
-    input.form-control(type='text', name='rrule.interval', value='1', ng-model='newObj.rrule.interval')
-  div.col-sm-3
-    label(for='rrule.freq') (frequency)
-    +select('rrule.freq', 'newObj.rrule.freq', [{value: 2, label: "weeks"}, {value: 3, label: "days"}, {value: 1, label: "months"}])
-  div.col-sm-6
-    label(for='rrule.until') until
-    +input(false, 'date', 'rrule.until', "until", 'newObj.rrule.until', {})
 
+//- input() is the generic form builder
 mixin input(required, type, name, label, model, options)
   if type === 'location'
     +location(required, type, name, label, name)
+  else if type === 'rrule'
+    +rrule(name, model)
+  else if type === 'select'
+    +select(name, model, options)
   else if type === 'date'
     - var requiredf = (required ? required='required' : required='false')
     input.form-control(ng-required=requiredf,
@@ -69,10 +113,6 @@ mixin input(required, type, name, label, model, options)
             placeholder="Time",
             data-time-format="h:mma",
             bs-timepicker)
-  else if type === 'rrule'
-    +rrule(name, model)
-  else if type === 'select'
-    +select(name, model, options)
   else
     div.controls
       - var requiredf = (required ? required='required' : required='false')
@@ -81,6 +121,17 @@ mixin input(required, type, name, label, model, options)
             ng-model='#{model}',
             name='#{name}',
             placeholder="#{label}")
+
+mixin rrule(name, model)
+  div.col-sm-3
+    label(for='rrule.interval') Every
+    input.form-control(type='text', name='rrule.interval', value='1', ng-model='newObj.rrule.interval')
+  div.col-sm-3
+    label(for='rrule.freq') (frequency)
+    +select('rrule.freq', 'newObj.rrule.freq', [{value: 2, label: "weeks"}, {value: 3, label: "days"}, {value: 1, label: "months"}])
+  div.col-sm-6
+    label(for='rrule.until') until
+    +input(false, 'date', 'rrule.until', "until", 'newObj.rrule.until', {})
 
 mixin select(name, model, choices)
   select.form-control(name='#{name}',
@@ -91,6 +142,12 @@ mixin select(name, model, choices)
       else
         option(value="#{choice}") #{choice}
 
+mixin location(required, type, name, label, model)
+  +locationfield(true, model, name, 'street', "Street")
+  +locationfield(true, model, name, 'city', "City")
+  +locationfield(false, model, name, 'state', "State")
+  +locationfield(false, model, name, 'zip', "ZIP")
+
 mixin locationfield(required, model, name, fieldname, label)
   div.controls.locationfield
     - var requiredf = (required ? required='required' : required='false')
@@ -99,48 +156,3 @@ mixin locationfield(required, model, name, fieldname, label)
           ng-model='#{model}.#{fieldname}',
           name='#{name}.#{fieldname}',
           placeholder="#{label}")
-
-mixin location(required, type, name, label, model)
-  +locationfield(true, model, name, 'street', "Street")
-  +locationfield(true, model, name, 'city', "City")
-  +locationfield(false, model, name, 'state', "State")
-  +locationfield(false, model, name, 'zip', "ZIP")
-
-mixin textfield(form, field)
-  div.row.form-group
-    div.col-sm-3
-      label.control-label(for="#{field.name}") #{field.label}
-    div.col-sm-9
-      +input(field.required, field.type, field.name, field.label, 'newObj.'+field.name, field.options)
-
-mixin multipleinput(form, field)
-  div.row.form-group.multiple
-    div.col-sm-6
-      label.control-label(for="#{field.name}_{{$index+1}}") #{field.label}
-  div.row
-    div.col-sm-6
-      button.btn.btn-default(type='button',
-                             ng-click="newObj.#{field.name}.push({})",
-                             ng-show="!newObj.#{field.name} || newObj.#{field.name}.length == 0")
-        | Add #{field.label}
-  div.row.form-group(ng-repeat="#{field.name} in newObj.#{field.name}")
-    if field.type === 'relationship'
-      div.col-sm-3
-        +scope_select(field.required, field.name+'.person_a', field.name+'.person_a', field.label, field.scope_iterator)
-      div.col-sm-3
-        +select(field.name+'_label', field.name+'.type', field.choices)
-      div.col-sm-3
-        +scope_select(field.required, field.name+'.person_b', field.name+'.person_b', field.label, field.scope_iterator)
-    else
-      div.col-sm-5
-        +input(field.required, field.type, field.name, field.label, field.name+'.value')
-      if field.choices
-        div.col-sm-4
-          +select(field.name+'_label', field.name+'.label', field.choices)
-    div.col-sm-3
-      button.btn.btn-default(type='button',
-                             ng-click="newObj.#{field.name}.push({})")
-        +glyphicon("plus")
-      button.btn.btn-default(type='button',
-                             ng-click="newObj.#{field.name}.splice($index, 1)")
-        +glyphicon("remove")
