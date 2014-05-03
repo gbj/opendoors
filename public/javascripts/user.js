@@ -19,6 +19,8 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
   $scope.username = "";
   $scope.password = "";
   $scope.save = function() {
+    $scope.buttonDisabled = true;
+
     // Because AngularJS models don't play well with autocomplete, it's necessary to manually pull values from fields
     $scope.username = $("input[name='username']").val();
     $scope.password = $("input[name='password']").val();
@@ -29,6 +31,7 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
       password: $scope.password
     })
       .success(function(response) {
+        $scope.buttonDisabled = false;
         console.log(response);
         if (response.error) {
           console.log(response.error);
@@ -37,6 +40,7 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
         }
       })
       .error(function(data) {
+        $scope.buttonDisabled = false;
         console.log('Error: ', data);
       });
   }

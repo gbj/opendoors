@@ -62,11 +62,14 @@ var ngCRUD = {
         }
 
         $scope.save = function(form) {
+          $scope.buttonDisabled = true;
+
           if(options.preSave) {
             options.preSave($scope, $http);
           }
           $http.post(api, $scope.newObj)
             .success(function(response) {
+              $scope.buttonDisabled = false;
               if (response.error) {
                 console.log(response.error);
               } else if (response.obj) {
@@ -76,6 +79,7 @@ var ngCRUD = {
               }
             })
             .error(function(data) {
+              $scope.buttonDisabled = false;
               console.log('Error: ', data);
             });
         }
@@ -93,6 +97,8 @@ var ngCRUD = {
         }
 
         $scope.save = function(form) {
+          $scope.buttonDisabled = true;
+
           if(options.preSave) {
             options.preSave($scope, $http);
           }
@@ -103,8 +109,10 @@ var ngCRUD = {
               } else if (response.obj) {
                 $location.path(redirect_url+'/'+response.obj.slug);
               }
+              $scope.buttonDisabled = false;
             })
             .error(function(data) {
+              $scope.buttonDisabled = false;
               console.log('Error: ', data);
             });
         }
