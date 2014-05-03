@@ -1,0 +1,16 @@
+include ../addons
+include ../forms
+
+div.well.login.center(ng-controller="RegisterCtrl")
+  +valform('registerForm', [
+    {type: 'email', name: 'username', label: "Email", required: true},
+    {type: 'password', name: 'password', label: "Password", required: true},
+    {
+      type: 'scope_select',
+      name: 'congregation',
+      label: "Congregation",
+      scope_variable: "congregations",
+      scope_iterator: "c.id as c.name for c in congregations",
+      required: true,
+    }
+  ])

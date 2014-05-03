@@ -1,0 +1,10 @@
+include ../addons
+
+div.well.login.center(ng-controller="LoginCtrl")
+  form.form-horizontal(name="loginForm", ng-submit="save()", role="form")
+    input.form-control(type="text", name="username", ng-model="username", placeholder="Username", ng-required)
+    input.form-control(type="password", name="password", ng-model="password", placeholder="Password", ng-required)
+    div.center
+      button.btn.btn-primary(type='submit') Login
+  div.center
+    a(href='/register') Create an account

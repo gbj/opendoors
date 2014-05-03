@@ -54,6 +54,7 @@ var ngCRUD = {
   create: function(api, redirect_url, options) {
     return ['$scope', '$http', '$location',
       function($scope, $http, $location) {
+        options = options || {};
         $scope.newObj = options.newObj || {};
 
         if(options.addedScope) {
@@ -70,6 +71,8 @@ var ngCRUD = {
                 console.log(response.error);
               } else if (response.obj) {
                 $location.path(redirect_url+'/'+response.obj.slug);
+              } else {
+                $location.path(redirect_url);
               }
             })
             .error(function(data) {
@@ -82,6 +85,7 @@ var ngCRUD = {
   update: function(api, redirect_url, options) {
     return ['$scope', '$http', '$location', '$routeParams',
       function($scope, $http, $location, $routeParams) {
+        options = options || {};
         $scope.newObj = options.newObj || {};
 
         if(options.addedScope) {

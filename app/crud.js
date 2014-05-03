@@ -38,7 +38,13 @@ module.exports = {
   read: function(model) {
     return (function(req, res) {
       var populates = url.parse(req.url, true).query.populate || '';
-      var found = populate(model.findOne({slug: req.params.slug}), populates);
+      // Search by slug or by ID
+      var query = {$or: [{slug: req.params.slug}]};
+      // If it matches a query for a valid ObjectID, add that to query
+      if (req.params.slug.match(/^[0-9a-fA-F]{24}$/)) {
+        query.$or.push({_id: req.params.slug});
+      }
+      var found = populate(model.findOne(query), populates);
       found.exec(function(err, obj) {
         if(err || obj === null) {
           res.status(404);

@@ -16,6 +16,7 @@ html(lang='en', ng-app='opendoors')
     script(src='/components/fullcalendar/fullcalendar.js')
     script(src='/javascripts/opendoors.js')
     script(src='/javascripts/ngcrud.js')
+    script(src='/javascripts/user.js')
     script(src='/javascripts/people.js')
     script(src='/javascripts/congregation.js')
     script(src='/javascripts/event.js')
@@ -38,8 +39,19 @@ html(lang='en', ng-app='opendoors')
             a(href='/event') Events
           li
             a(href='/congregation') Congregations
-        ul.nav.navbar-right
-          li
-            a(href='/login') Login
+        ul.nav.navbar-nav.navbar-right
+          if (!user)
+            li
+              a(href="/login") Login
+            li
+              a(href="/register") Register
+          if (user)
+            li
+              a(href="/logout") Logout
     div.container
       ng-view
+    script
+      if (!user)
+        | var user = null
+      else
+        | var user = { username: "#{user.username}", congregation: "#{user.congregation}" }

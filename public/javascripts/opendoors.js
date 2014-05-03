@@ -12,7 +12,7 @@ var app = angular.module('opendoors', ['mgcrea.ngStrap', 'ngAnimate', 'ngRoute',
         // Error: if 401 or 404, act
         function(res) {
           if(res.status === 401) {
-            $location.url('/user/login');
+            $location.url('/login?error');
           } else if (res.status === 404) {
             $location.url('/404')
           }
@@ -26,6 +26,29 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
   function($routeProvider, $locationProvider) {
     $routeProvider
       .when('/404', {templateUrl: '/partials/404', title: "Oh no!"})
+      // Index
+      .when('/', {
+        templateUrl: '/partials/index', 
+        controller: "IndexCtrl",
+        title: "Home"
+      })
+      // Users
+      .when('/login', {
+        templateUrl: '/partials/user/login',
+        controller: "LoginCtrl",
+        title: "Login"
+      })
+      .when('/register', {
+        templateUrl: '/partials/user/register',
+        controller: "RegisterCtrl",
+        title: "Create a New Account"
+      })
+      .when('/logout', {
+        templateUrl: '/partials/user/logout',
+        controller: "LogoutCtrl",
+        title: "Logout"
+      })
+      // People
       .when('/people', {
         templateUrl: '/partials/people/person_list',
         controller: "PersonListCtrl",
@@ -51,6 +74,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         controller: "PersonDeleteCtrl",
         title: "Delete a Person"
       })
+      // Events
       .when('/event', {
         templateUrl: '/partials/events/event_list',
         controller: "EventListCtrl",
@@ -76,6 +100,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         controller: "EventDeleteCtrl",
         title: "Delete an Event"
       })
+      // Congregations
       .when('/congregation', {
         templateUrl: '/partials/congregations/congregation_list',
         controller: 'CongregationListCtrl',
@@ -111,3 +136,19 @@ app.run(function($rootScope, $route) {
       $rootScope.title = $route.current.title;
     });
 });
+
+app.controller("IndexCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
+  if(user && user.congregation) {
+    $scope.username = user.username;
+    $scope.congregation = {};
+    $http.get('/api/congregation/'+user.congregation)
+      .success(function(data) {
+        $scope.congregation = data;
+      })
+      .error(function(err) {
+        console.log(err);
+      });
+  } else {
+    $location.url('/login');
+  }
+}]);

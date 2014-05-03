@@ -1,9 +1,11 @@
 var url = require('url'),
+    passport = require('passport'),
     CRUD = require('./crud'),
     people = require('./models/person'),
     Person = people.Person,
     Relationship = people.Relationship,
     Congregation = require('./models/congregation'),
+    Account = require('./models/account'),
     Event = require('./models/event');
 
 module.exports = function(app) {
@@ -26,22 +28,31 @@ module.exports = function(app) {
   }
 
   // Authorization
-  var passport = require('passport');
-  var auth = function(req, res, next) {
-    if(!req.isAuthenticated())
-      res.send(401);
-    else
-      next();
-  }
-  app.get('/user/loggedin', function(req, res) {
-    res.send(req.isAuthenticated() ? req.user : '0');
+  app.get('/api/user', CRUD.readAll(Account));
+  app.post('/api/user/register', function(req, res) {
+    Account.register(new Account({ username : req.body.username, congregation: req.body.congregation }), req.body.password, function(err, account) {
+      if (err) {
+        res.status(400);
+        console.log(err);
+        res.json({error: "That email address is already registered for an account. Try logging in."});
+      }
+
+      passport.authenticate('local')(req, res, function () {
+        res.status(200);
+        res.send('OK');
+      });
+    });
   });
-  app.post('/user/login', passport.authenticate('local'), function(req, res) {
-    res.send(req.user);
+  app.put('/api/user/:slug', CRUD.update(Account));
+  app.del('/api/user/:slug', CRUD.create(Account));
+  app.post('/api/user/login', passport.authenticate('local'), function(req, res) {
+    console.log("LOGGED IN");
+    res.send('OK');
   });
-  app.post('/user/logout', function(req, res) {
-    res.logOut();
-    res.send(200);
+  app.get('/api/user/logout', function(req, res) {
+    console.log("LOGOUT")
+    req.logout();
+    res.send('OK');
   });
 
   // URLs
@@ -129,8 +140,8 @@ module.exports = function(app) {
   // Jade partials
   app.get('/partials/*', function (req, res) {
     var name = req.params[0];
-    res.render('partials/' + name);
+    res.render('partials/' + name, {user: req.user});
   });
   // Everything else goes to Angular.js client router
-  app.get('/*', function(req, res) { res.render('layout'); });
+  app.get('/*', function(req, res) { res.render('layout', { user : req.user }); });
 }

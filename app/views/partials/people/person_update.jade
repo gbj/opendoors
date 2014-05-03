@@ -8,8 +8,7 @@ div.well(ng-controller="PersonUpdateCtrl")
       name: 'congregation',
       label: "Congregation",
       scope_variable: "congregations",
-      scope_iterator: "c.id as c.name for c in congregations",
-      required: true,
+      scope_iterator: "c.id as c.name for c in congregations"
     },
     {type: 'text', name: 'first_name', label: "First Name", required: true},
     {type: 'text', name: 'last_name', label: "Last Name", required: true},

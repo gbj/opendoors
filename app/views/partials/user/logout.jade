@@ -1,0 +1,7 @@
+include ../addons
+
+div.well.login.center(ng-controller="LogoutCtrl")
+  p Do you want to log out?
+  form.form-horizontal(name="logoutForm", ng-submit="logout()")
+    button.btn.btn-default(type='submit') Yes
+    a.btn.btn-default(ng-click="back()") No
