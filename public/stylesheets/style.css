@@ -20,6 +20,11 @@ div.well.login {
   max-width: 600px;
 }
 
+div.well.login .controls button {
+  text-align: left;
+  float: left;
+}
+
 /* Detail pages */
 .editdeletebuttons {
   float: right;
