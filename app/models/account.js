@@ -9,6 +9,10 @@ var AccountSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Congregation',
     required: true
+  },
+  role: {
+    type: String,
+    enum: ['Super-Admin', 'Admin', 'Staff', 'Member']
   }
 });
 AccountSchema.virtual('name').get(function () {

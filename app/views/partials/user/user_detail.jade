@@ -8,3 +8,5 @@ div.detail
     h2 ({{ obj.congregation.name }})
   +datum("Email")
     a(ng-href='mailto:{{ obj.username }}') {{ obj.username }}
+  +datum("Role")
+    {{ obj.role}}
