@@ -9,7 +9,7 @@ var eventSchema = new mongoose.Schema({
   permission: {
     type: String,
     required: true,
-    enum: ['Private', 'Congregation', 'Public']
+    enum: ['Private', 'Staff', 'Congregation', 'Public']
   },
   event_type: {type: String, required: true},
   room: String,
