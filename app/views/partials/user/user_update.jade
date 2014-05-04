@@ -1,12 +1,11 @@
 include ../addons
 include ../forms
 
-div.well.login.center(ng-controller="RegisterCtrl")
-  +valform('registerForm', [
+div.well(ng-controller="UserUpdateCtrl")
+  +valform('userUpdateForm', [
     {type: 'text', name: 'first_name', label: "First Name", required: true},
     {type: 'text', name: 'last_name', label: "Last Name", required: true},
     {type: 'email', name: 'username', label: "Email", required: true},
-    {type: 'password', name: 'password', label: "Password", required: true},
     {
       type: 'scope_select',
       name: 'congregation',

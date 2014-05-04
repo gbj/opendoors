@@ -1,7 +1,0 @@
-include addons
-
-div.well(ng-controller="CongregationDeleteCtrl")
-  p Are you sure you want to delete {{ obj.name }}?
-  form.form-horizontal(name="congregationDelForm", ng-submit="del(congregationDelForm)")
-    button.btn.btn-default(type='submit') Yes
-    a.btn.btn-default(href='/congregation') No

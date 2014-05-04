@@ -1,15 +1,67 @@
 var app = angular.module('opendoors');
 
+// User Admin
+app.controller("UserListCtrl", ngCRUD.readList('/api/user', {populate: 'congregation'}));
+app.controller("UserDetailCtrl", ngCRUD.read('/api/user', {populate: 'congregation'})); // ngCRUD will add slug
+app.controller("UserDeleteCtrl", ngCRUD.delete('/api/user', '/users'));
+app.controller("UserCreateCtrl", ngCRUD.create('/api/user', '/users', {
+  newObj: {},
+  addedScope: function($scope, $http) {
+    $http.get('/api/congregation')
+      .success(function(data) {
+        $scope.congregations = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+
+    $http.get('/api/people')
+      .success(function(data) {
+        $scope.people = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+  }
+}));
+
+app.controller("UserUpdateCtrl", ngCRUD.update('/api/user', '/users', {
+  addedScope: function($scope, $http, slug) {
+    $http.get('/api/congregation')
+      .success(function(data) {
+        $scope.congregations = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+
+    $http.get('/api/people')
+      .success(function(data) {
+        $scope.people = data;
+      })
+      .error(function(data) {
+        console.log("Error: ", data);
+      });
+    
+    // Get initial data for the user
+    $http.get('/api/user/'+slug)
+      .success(function(data) {
+        $scope.newObj = data;
+        console.log('newObj: ', data);
+      })
+      .error(function(data) {
+        console.log('Error: ', data);
+      });
+  }
+}));
+
+// Registration and Login
 var changeLocation = function($scope, $location, url, forceReload) {
   $scope = $scope || angular.element(document).scope();
   if(forceReload || $scope.$$phase) {
     window.location = url;
   }
   else {
-    //only use this if you want to replace the history stack
-    //$location.path(url).replace();
-
-    //this this if you want to change the URL and add it to the history stack
     $location.path(url);
     $scope.$apply();
   }
@@ -46,8 +98,8 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
   }
 }]);
 
-app.controller("RegisterCtrl", ngCRUD.create('/api/user/register', '/login', {
-  addedScope: function($scope, $http) {
+app.controller("RegisterCtrl", ['$scope', '$http', '$location',
+  function($scope, $http, $location) {
     $http.get('/api/congregation')
       .success(function(data) {
         $scope.congregations = data;
@@ -55,8 +107,27 @@ app.controller("RegisterCtrl", ngCRUD.create('/api/user/register', '/login', {
       .error(function(data) {
         console.log("Error: ", data);
       });
+
+    $scope.save = function(form) {
+      // Because AngularJS models don't play well with autocomplete, it's necessary to manually pull values from fields
+      $scope.newObj.username = $("input[name='username']").val();
+      $scope.newObj.password = $("input[name='password']").val();
+      // End autocomplete fudge
+    
+      $scope.buttonDisabled = true;
+
+      $http.post('/api/user/register', $scope.newObj)
+        .success(function(response) {
+          $scope.buttonDisabled = false;
+          changeLocation($scope, $location, '/', true);
+        })
+        .error(function(data) {
+          $scope.buttonDisabled = false;
+          console.log('Error: ', data);
+        });
+    }
   }
-}));
+]);
 
 app.controller("LogoutCtrl", ['$scope', '$http', '$location', '$window', function($scope, $http, $location, $window) {
   $scope.logout = function() {

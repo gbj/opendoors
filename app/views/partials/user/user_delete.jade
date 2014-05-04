@@ -1,0 +1,7 @@
+include ../addons
+
+div.well(ng-controller="UserDeleteCtrl")
+  p Are you sure you want to delete user &quot;{{ obj.first_name }} {{ obj.last_name }}&quot;?
+  form.form-horizontal(name="userDelForm", ng-submit="del(userDelForm)")
+    button.btn.btn-default(type='submit') Yes
+    a.btn.btn-default(ng-href='/users/{{ user.slug}}') No

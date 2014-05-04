@@ -29,8 +29,15 @@ module.exports = function(app) {
 
   // Authorization
   app.get('/api/user', CRUD.readAll(Account));
+  app.get('/api/user/:slug', CRUD.read(Account));
   app.post('/api/user/register', function(req, res) {
-    Account.register(new Account({ username : req.body.username, congregation: req.body.congregation }), req.body.password, function(err, account) {
+    console.log({ username : req.body.username, congregation: req.body.congregation });
+    Account.register(new Account({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      username : req.body.username,
+      congregation: req.body.congregation
+    }), req.body.password, function(err, account) {
       if (err) {
         res.status(400);
         console.log(err);
@@ -43,8 +50,23 @@ module.exports = function(app) {
       });
     });
   });
+  app.post('/api/user', function(req, res) {
+    console.log({ username : req.body.username, congregation: req.body.congregation });
+    Account.register(new Account({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      username : req.body.username,
+      congregation: req.body.congregation
+    }), req.body.password, function(err, account) {
+      if (err) {
+        res.status(400);
+        console.log(err);
+        res.json({error: "That email address is already registered for an account. Try logging in."});
+      }
+    });
+  });
   app.put('/api/user/:slug', CRUD.update(Account));
-  app.del('/api/user/:slug', CRUD.create(Account));
+  app.del('/api/user/:slug', CRUD.delete(Account));
   app.post('/api/user/login', passport.authenticate('local'), function(req, res) {
     console.log("LOGGED IN");
     res.send('OK');

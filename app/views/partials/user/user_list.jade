@@ -1,0 +1,29 @@
+include ../addons
+
+div.list.well
+  div.row
+    div.col-xs-12
+      div.input-group
+        span.input-group-btn
+          a.btn.btn-primary(href='/user/new')
+            +glyphicon("plus")
+            | Add
+        input.form-control(type='search',
+                           placeholder="Search",
+                           ng-model="search")  
+  div.person-list.row(ng-repeat="user in obj_list | filter:search")
+    div.hidden-xs.col-sm-2
+      a.action(ng-click="quickdelete(user.slug)")
+        +glyphicon("remove")
+      a.action(href='/users/{{ user.slug }}/edit')
+        +glyphicon("edit")
+      a.action(href='/users/{{ user.slug }}')
+        +glyphicon("info-sign")
+    div.col-sm-2.hidden-xs {{ user.first_name }}
+    div.col-sm-2.hidden-xs {{ user.last_name }}
+    div.col-sm-3.visible-xs
+      a(href='/users/{{ user.slug }}') {{ user.name }}
+    div.col-sm-3
+      a(href="mailto:{{ user.username }}")
+        {{ user.username }}
+    div.col-sm-3 {{ user.congregation.name }}

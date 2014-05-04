@@ -1,0 +1,10 @@
+include ../addons
+
+div.detail
+  +editdeletebuttons('/users/{{ obj.slug }}')
+  +datum
+    h1 {{ obj.first_name }} {{ obj.last_name }}
+  +datum
+    h2 ({{ obj.congregation.name }})
+  +datum("Email")
+    a(ng-href='mailto:{{ obj.username }}') {{ obj.username }}

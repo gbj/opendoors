@@ -48,6 +48,32 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
         controller: "LogoutCtrl",
         title: "Logout"
       })
+      // User Admin
+      .when('/users', {
+        templateUrl: '/partials/user/user_list',
+        controller: "UserListCtrl",
+        title: "Users"
+      })
+      .when('/users/new', {
+        templateUrl: '/partials/user/register',
+        controller: "UserCreateCtrl",
+        title: "Add a User"
+      })
+      .when('/users/:slug', {
+        templateUrl: '/partials/user/user_detail',
+        controller: "UserDetailCtrl",
+        title: "Users"
+      })
+      .when('/users/:slug/edit', {
+        templateUrl: '/partials/user/user_update',
+        controller: "UserUpdateCtrl",
+        title: "Edit a User"
+      })
+      .when('/users/:slug/delete', {
+        templateUrl: '/partials/user/user_delete',
+        controller: "UserDeleteCtrl",
+        title: "Delete a User"
+      })
       // People
       .when('/people', {
         templateUrl: '/partials/people/person_list',
