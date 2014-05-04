@@ -178,3 +178,17 @@ app.controller("IndexCtrl", ['$scope', '$http', '$location', function($scope, $h
     $location.url('/login');
   }
 }]);
+
+app.controller("NavCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
+  if(user && user.congregation) {
+    $scope.username = user.username;
+    $scope.congregation = {};
+    $http.get('/api/congregation/'+user.congregation)
+      .success(function(data) {
+        $scope.congregation = data;
+      })
+      .error(function(err) {
+        console.log(err);
+      });
+  }
+}]);

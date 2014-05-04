@@ -9,29 +9,8 @@ var url = require('url'),
     Event = require('./models/event');
 
 module.exports = function(app) {
-  // API
-  function readPersonListCSV(req, res) {
-    var csvheader = [['First Name', 'Last Name']];
-    function personToCSV(person) {
-      return [person.first_name, person.last_name];
-    }
-    Person.find().sort('first_name').sort('last_name').exec(function(err, people) {
-      if(err) {
-        next("Oops! Something went wrong when we were searching for people!");
-      } else {
-        var list = csvheader.concat(people.map(personToCSV));
-        console.log(people.map(personToCSV));
-        console.log(list)
-        res.csv(list);
-      }
-    });
-  }
-
   // Authorization
-  app.get('/api/user', CRUD.readAll(Account));
-  app.get('/api/user/:slug', CRUD.read(Account));
   app.post('/api/user/register', function(req, res) {
-    console.log({ username : req.body.username, congregation: req.body.congregation });
     Account.register(new Account({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -51,7 +30,6 @@ module.exports = function(app) {
     });
   });
   app.post('/api/user', function(req, res) {
-    console.log({ username : req.body.username, congregation: req.body.congregation });
     Account.register(new Account({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -65,27 +43,39 @@ module.exports = function(app) {
       }
     });
   });
-  app.put('/api/user/:slug', CRUD.update(Account));
-  app.del('/api/user/:slug', CRUD.delete(Account));
   app.post('/api/user/login', passport.authenticate('local'), function(req, res) {
-    console.log("LOGGED IN");
     res.send('OK');
   });
   app.get('/api/user/logout', function(req, res) {
-    console.log("LOGOUT")
     req.logout();
     res.send('OK');
   });
+  app.get('/api/user', CRUD.readAll(Account));
+  app.get('/api/user/:slug', CRUD.read(Account));
+  app.put('/api/user/:slug', CRUD.update(Account));
+  app.del('/api/user/:slug', CRUD.delete(Account));
 
   // URLs
   
 
   // Backend -- API
-  app.get('/api/people', CRUD.readAll(Person));
+  app.get('/api/people', CRUD.readAll(Person, {
+    query: function(user) {
+      return {congregation: user.congregation};
+    }
+  }));
   app.post('/api/people', CRUD.create(Person));
   app.get('/api/people/:slug', CRUD.read(Person));
-  app.put('/api/people/:slug', CRUD.update(Person));
-  app.del('/api/people/:slug', CRUD.delete(Person));
+  app.put('/api/people/:slug', CRUD.update(Person, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation));
+    }
+  }));
+  app.del('/api/people/:slug', CRUD.delete(Person, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation));
+    }
+  }));
   app.get('/api/people/:slug/relationships', function(req, res) {
     Person.findOne({slug: req.params.slug}).exec(function(err, obj) {
       if(err || obj === null) {
@@ -110,8 +100,16 @@ module.exports = function(app) {
   app.get('/api/congregation', CRUD.readAll(Congregation));
   app.post('/api/congregation', CRUD.create(Congregation));
   app.get('/api/congregation/:slug', CRUD.read(Congregation));
-  app.put('/api/congregation/:slug', CRUD.update(Congregation));
-  app.del('/api/congregation/:slug', CRUD.delete(Congregation));
+  app.put('/api/congregation/:slug', CRUD.update(Congregation, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation));
+    }
+  }));
+  app.del('/api/congregation/:slug', CRUD.delete(Congregation, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation));
+    }
+  }));
   app.get('/api/congregation/:slug/members', function(req, res) {
     Congregation.findOne({slug: req.params.slug}).exec(function(err, obj) {
       if(err || obj === null) {
@@ -130,12 +128,40 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/api/event', CRUD.readAll(Event));
+  app.get('/api/event', CRUD.readAll(Event, {
+    query: function(user, congregation) {
+      return {congregation: congregation};
+    },
+    filter: function(user) {
+      return function(obj) {
+        if(!user) {
+          return (obj.permission == 'Public');
+        } else {
+          return (user.role == 'Super-Admin' || user.id == event.host || obj.permission == 'Public'
+                  || (user.role == 'Admin' && user.congregation == obj.congregation)
+                  || (user.role == 'Staff' && user.congregation == obj.congregation && obj.permission == 'Staff')
+                  || (user.role == 'Member' && user.congregation == obj.congregation && obj.permission == 'Member'));
+        }
+      }
+    }
+  }));
   app.get('/api/event.fullcalendar.json', function(req, res) {
     var start = new Date(parseInt(url.parse(req.url, true).query.start)*1000), // from timestamp in seconds to milliseconds
         end = new Date(parseInt(url.parse(req.url, true).query.end)*1000); // from timestamp in seconds to milliseconds
     var events = [];
-    Event.find(function(err, list) {
+    Event.find(function(err, objects) {
+      // Check for permissions
+      var user = req.user;
+      var list = objects.filter(function(obj) {
+        if(!user) {
+          return (obj.permission == 'Public');
+        } else {
+          return (user.role == 'Super-Admin' || user.id == event.host || obj.permission == 'Public'
+                  || (user.role == 'Admin' && user.congregation == obj.congregation)
+                  || (user.role == 'Staff' && user.congregation == obj.congregation && obj.permission == 'Staff')
+                  || (user.role == 'Member' && user.congregation == obj.congregation && obj.permission == 'Member'));
+        }
+      });
       for(var ii in list) {
         var obj = list[ii],
             occ = obj.occurrences(start, end);
@@ -155,14 +181,26 @@ module.exports = function(app) {
   })
   app.post('/api/event', CRUD.create(Event));
   app.get('/api/event/:slug', CRUD.read(Event));
-  app.put('/api/event/:slug', CRUD.update(Event));
-  app.del('/api/event/:slug', CRUD.delete(Event));
+  app.put('/api/event/:slug', CRUD.update(Event, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin'
+              || (user.role == 'Admin' && user.congregation == obj.congregation)
+              || (user.id == event.host));
+    }
+  }));
+  app.del('/api/event/:slug', CRUD.delete(Event, {
+    permission: function(user, obj) {
+      return (user.role == 'Super-Admin'
+              || (user.role == 'Admin' && user.congregation == obj.congregation)
+              || (user.id == event.host));
+    }
+  }));
 
   // Frontend -- Client
   // Jade partials
   app.get('/partials/*', function (req, res) {
     var name = req.params[0];
-    res.render('partials/' + name, {user: req.user});
+    res.render('partials/' + name, {user: req.user });
   });
   // Everything else goes to Angular.js client router
   app.get('/*', function(req, res) { res.render('layout', { user : req.user }); });

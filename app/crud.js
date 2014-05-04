@@ -22,20 +22,49 @@ function populate(found_init, pop_string) {
 }
 
 module.exports = {
-  readAll: function(model) {
+  readAll: function(model, options) {
     return (function(req, res) {
-      var populates = url.parse(req.url, true).query.populate || '';
-      var found = populate(model.find(), populates);
-      found.exec(function(err, list) {
-        if(err) {
-          next(err);
-        } else {
-          res.json(list);
+      // First, check for permission
+      var permission = true;
+      if(options && options.permission) {
+        permission = !!req.user && options.permission(req.user);
+      }
+      
+      if(permission) {
+        // Parse URL for any fields in ?populate=...
+        var populates = url.parse(req.url, true).query.populate || '';
+        // Parse URL for any GET['congregation']
+        var congregation = url.parse(req.url, true).query.congregation || false;
+
+        // Get query from options
+        var query = {};
+        if(options && options.query) {
+          query = options.query(req.user, congregation || req.user.congregation);
         }
-      });
+
+        // Run the query and return results accordingly
+        var found = populate(model.find(query), populates);
+        found.exec(function(err, objects) {
+          if(err) {
+            next(err);
+          } else {
+            // If there's a filter to be applied, filter the list before returning JSON
+            var list;
+            if(options && options.filter) {
+              list = objects.filter(options.filter(req.user));
+            } else {
+              list = objects;
+            }
+            res.json(list);
+          }
+        });
+      } else {
+        res.status(403);
+        res.json({error: 'You do not have permission to access this resource.'});
+      }
     });
   },
-  read: function(model) {
+  read: function(model, options) {
     return (function(req, res) {
       var populates = url.parse(req.url, true).query.populate || '';
       // Search by slug or by ID
@@ -55,56 +84,87 @@ module.exports = {
       });
     });
   },
-  create: function(model) {
+  create: function(model, options) {
     return (function(req, res) {
-      var obj = construct(model, [req.body]);
-      console.log("POST: ",req.body);
-      obj.validate(function(error) {
-        if(error) {
-          res.json({error : error });
-        } else {
-          obj.save(function(error, doc) {
-            console.log("RESPONSE OBJECT: ", doc);
-            res.json({obj: doc});
-          });
-        }
-      });
-    });
-  },
-  update: function(model) {
-    return (function(req, res) {
-      var obj = req.body;
-      console.log("PUT: ",req.body);
-      delete obj._id;
-      model.findOneAndUpdate({slug: req.params.slug}, obj, function(err, doc) {
-        if(err) {
-          throw err;
-        } else {
-          console.log("RESPONSE OBJECT: ", doc);
-          res.json({obj: doc});
-        }
-      });
-    });
-  },
-  delete: function(model) {
-    return (function(req, res) {
-      model.findOneAndRemove({slug: req.params.slug}, function(err, doc) {
-        if(err) {
-          res.status(404);
-          res.send('404');
-        } else {
-          if(err) {
-            res.json(err);
+      // First, check for permission
+      var permission = true;
+      if(options && options.permission) {
+        permission = !!req.user && options.permission(req.user);
+      }
+      
+      if(permission) {
+        var obj = construct(model, [req.body]);
+        obj.validate(function(error) {
+          if(error) {
+            res.json({error : error });
           } else {
-            model.find().exec(function(err, list) {
-              if(err)
-                res.json(err);
-              else
-                res.json(list);
+            obj.save(function(error, doc) {
+              console.log("RESPONSE OBJECT: ", doc);
+              res.json({obj: doc});
             });
           }
-        }
-      });
+        });
+      } else {
+        res.status(403);
+        res.json({error: 'You do not have permission to access this resource.'});
+      }
+    });
+  },
+  update: function(model, options) {
+    return (function(req, res) {
+      // First, check for permission
+      var permission = true;
+      if(options && options.permission) {
+        permission = !!req.user && options.permission(req.user);
+      }
+      
+      if(permission) {
+        var obj = req.body;
+        delete obj._id;
+        model.findOneAndUpdate({slug: req.params.slug}, obj, function(err, doc) {
+          if(err) {
+            throw err;
+          } else {
+            console.log("RESPONSE OBJECT: ", doc);
+            res.json({obj: doc});
+          }
+        });
+      } else {
+        res.status(403);
+        res.json({error: 'You do not have permission to access this resource.'});
+      }
+    });
+  },
+  delete: function(model, options) {
+    return (function(req, res) {
+      // First, check for permission
+      var permission = true;
+      if(options && options.permission) {
+        permission = !!req.user && options.permission(req.user);
+      }
+      
+      if(permission) {
+        model.findOneAndRemove({slug: req.params.slug}, function(err, doc) {
+          if(err) {
+            res.status(404);
+            res.send('404');
+          } else {
+            if(err) {
+              res.json(err);
+            } else {
+              model.find().exec(function(err, list) {
+                if(err)
+                  res.json(err);
+                else
+                  res.json(list);
+              });
+            }
+          }
+        });
+      } else {
+        res.status(403);
+        res.json({error: 'You do not have permission to access this resource.'});
+      }
     });
   }
 }

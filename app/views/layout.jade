@@ -4,8 +4,8 @@ html(lang='en', ng-app='opendoors')
     base(href='/')
     title(ng-bind="'OpenDoors - '+$root.title") OpenDoors - Welcome
     link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/components/fullcalendar/fullcalendar.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='//code.jquery.com/jquery-2.1.0.min.js')
     script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.js')
     script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular-route.js')
@@ -21,7 +21,7 @@ html(lang='en', ng-app='opendoors')
     script(src='/javascripts/congregation.js')
     script(src='/javascripts/event.js')
   body(ng-cloak)
-    nav.navbar.navbar-default(role='navigation')
+    nav.navbar.navbar-default(role='navigation', ng-controller="NavCtrl")
       div.navbar-header
         button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse')
           span.sr-only Toggle navigation
@@ -40,6 +40,9 @@ html(lang='en', ng-app='opendoors')
           li
             a(href='/congregation') Congregations
         ul.nav.navbar-nav.navbar-right
+          if user && user.congregation
+            li
+              a.congregation(href="/{{ congregation.slug }}") {{ congregation.name }}
           if (!user)
             li
               a(href="/login") Login

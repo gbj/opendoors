@@ -15,6 +15,10 @@ a {
   margin-bottom: 10px;
 }
 
+nav a.congregation {
+  color: black;
+}
+
 /* Login/Register pages */
 div.well.login { 
   max-width: 600px;
