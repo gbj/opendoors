@@ -58,11 +58,13 @@ personSchema.virtual('age').get(function() {
   }
   if(birthday) {
     obj.age = now.diff(birthday, 'years');
-  }
-  if(obj.age < 2) {
-    obj.formatted = now.diff(birthday, 'months')+' months old';
+    if(obj.age && obj.age < 2) {
+      obj.formatted = now.diff(birthday, 'months')+' months old';
+    } else {
+      obj.formatted = obj.age+' years old';
+    }
   } else {
-    obj.formatted = obj.age+' years old';
+    obj = null;
   }
   return obj;
 });
