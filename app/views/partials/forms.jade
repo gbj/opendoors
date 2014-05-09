@@ -1,5 +1,6 @@
 //- valform is the basic entryway into forms.jade
 mixin valform(name, fields)
+  div.alert.alert-danger.center(ng-if="error.general") {{ error.general }}
   //- .form-horizontal is a Bootstrap 3 style
   //- We assume that there is an AngularJS function $scope.save() that will save the form
   form.form-horizontal(name="#{name}", ng-submit="save(#{name})", role="form")
@@ -15,7 +16,7 @@ mixin valform(name, fields)
 
 
 mixin label_frame(name, label)
-  div.row.form-group
+  div.row.form-group(ng-class="{'has-error': error.#{name}}")
     div.col-sm-3
       label.control-label(for="#{name}") #{label}
     div.controls.col-sm-9
@@ -35,7 +36,7 @@ mixin build_field(name, field)
 
 //- multipleinput() provides a form view that is maps onto a Mongoose [] field
 mixin multipleinput(field)
-  div.row.form-group.multiple
+  div.row.form-group
     div.col-sm-6
       label.control-label(for="#{field.name}_{{$index+1}}") #{field.label}
   div.row

@@ -39,6 +39,9 @@ html(lang='en', ng-app='opendoors')
             a(href='/event') Events
           li
             a(href='/congregation') Congregations
+          if user && (user.role == 'Admin' || user.role == 'Super-Admin')
+            li
+              a(href='/users') Admin
         ul.nav.navbar-nav.navbar-right
           if user && user.congregation
             li

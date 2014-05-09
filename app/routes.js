@@ -20,7 +20,7 @@ module.exports = function(app) {
       if (err) {
         res.status(400);
         console.log(err);
-        res.json({error: "That email address is already registered for an account. Try logging in."});
+        res.json(err);
       }
 
       passport.authenticate('local')(req, res, function () {
@@ -39,7 +39,7 @@ module.exports = function(app) {
       if (err) {
         res.status(400);
         console.log(err);
-        res.json({error: "That email address is already registered for an account. Try logging in."});
+        res.json(err);
       }
     });
   });

@@ -70,17 +70,24 @@ var ngCRUD = {
           $http.post(api, $scope.newObj)
             .success(function(response) {
               $scope.buttonDisabled = false;
-              if (response.error) {
-                console.log(response.error);
-              } else if (response.obj) {
+              if (response.obj) {
                 $location.path(redirect_url+'/'+response.obj.slug);
               } else {
                 $location.path(redirect_url);
               }
             })
-            .error(function(data) {
+            .error(function(response) {
               $scope.buttonDisabled = false;
-              console.log('Error: ', data);
+              var data = response.error;
+              if(data.name === 'BadRequestError') {
+                $scope.error = { general: data.message };
+              } else if (data.name === 'ValidationError') {
+                $scope.error = {};
+                for(var key in data.errors) {
+                  $scope.error[key] = true;
+                  console.log($scope.error);
+                }
+              } 
             });
         }
       }

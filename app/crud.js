@@ -96,7 +96,9 @@ module.exports = {
         var obj = construct(model, [req.body]);
         obj.validate(function(error) {
           if(error) {
-            res.json({error : error });
+            res.status(400);
+            console.log(error);
+            res.json({error: error});
           } else {
             obj.save(function(error, doc) {
               console.log("RESPONSE OBJECT: ", doc);
@@ -123,7 +125,9 @@ module.exports = {
         delete obj._id;
         model.findOneAndUpdate({slug: req.params.slug}, obj, function(err, doc) {
           if(err) {
-            throw err;
+            res.status(400);
+            console.log(error);
+            res.json({error: error});
           } else {
             console.log("RESPONSE OBJECT: ", doc);
             res.json({obj: doc});

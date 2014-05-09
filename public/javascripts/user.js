@@ -70,6 +70,8 @@ var changeLocation = function($scope, $location, url, forceReload) {
 app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
   $scope.username = "";
   $scope.password = "";
+  $scope.error = null;
+
   $scope.save = function() {
     $scope.buttonDisabled = true;
 
@@ -93,41 +95,50 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
       })
       .error(function(data) {
         $scope.buttonDisabled = false;
-        console.log('Error: ', data);
+        $scope.error = data;
       });
   }
 }]);
 
-app.controller("RegisterCtrl", ['$scope', '$http', '$location',
-  function($scope, $http, $location) {
-    $http.get('/api/congregation')
-      .success(function(data) {
-        $scope.congregations = data;
+app.controller("RegisterCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
+  $scope.error = null;
+  $scope.newObj = {};
+  
+  $http.get('/api/congregation')
+    .success(function(data) {
+      $scope.congregations = data;
+    })
+    .error(function(data) {
+      console.log("Error: ", data);
+    });
+
+  $scope.save = function(form) {
+    // Because AngularJS models don't play well with autocomplete, it's necessary to manually pull values from fields
+    $scope.newObj.username = $("input[name='username']").val();
+    $scope.newObj.password = $("input[name='password']").val();
+    // End autocomplete fudge
+  
+    $scope.buttonDisabled = true;
+
+    $http.post('/api/user/register', $scope.newObj)
+      .success(function(response) {
+        $scope.buttonDisabled = false;
+        changeLocation($scope, $location, '/', true);
       })
       .error(function(data) {
-        console.log("Error: ", data);
+        $scope.buttonDisabled = false;
+        if(data.name === 'BadRequestError') {
+          $scope.error = { general: data.message };
+        } else if (data.name === 'ValidationError') {
+          $scope.error = {};
+          for(var key in data.errors) {
+            $scope.error[key] = true;
+            console.log($scope.error);
+          }
+        }
       });
-
-    $scope.save = function(form) {
-      // Because AngularJS models don't play well with autocomplete, it's necessary to manually pull values from fields
-      $scope.newObj.username = $("input[name='username']").val();
-      $scope.newObj.password = $("input[name='password']").val();
-      // End autocomplete fudge
-    
-      $scope.buttonDisabled = true;
-
-      $http.post('/api/user/register', $scope.newObj)
-        .success(function(response) {
-          $scope.buttonDisabled = false;
-          changeLocation($scope, $location, '/', true);
-        })
-        .error(function(data) {
-          $scope.buttonDisabled = false;
-          console.log('Error: ', data);
-        });
-    }
   }
-]);
+}]);
 
 app.controller("LogoutCtrl", ['$scope', '$http', '$location', '$window', function($scope, $http, $location, $window) {
   $scope.logout = function() {
