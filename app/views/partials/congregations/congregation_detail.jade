@@ -10,10 +10,10 @@ div.detail
   +datum("Website", "obj.website")
     a(href='{{ obj.website }}') {{ obj.website }}
   +multidatum("Phone", "obj.phone")
-    a(href='tel:{{ obj.value }}') {{ obj.value }}
+    a(href='tel:{{ obj.value }}') {{ obj_ii.value }}
   +multidatum("Social Media", "obj.social_media")
-    {{ obj.value }}
+    +socialmedia('obj_ii')
   +multidatum("Address", "obj.address")
-    +address
+    +address('obj_ii')
   +multidatum("Rooms", "obj.rooms")
-    {{ obj.value }}
+    {{ obj_ii.value }}

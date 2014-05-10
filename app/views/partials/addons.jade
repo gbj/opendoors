@@ -5,8 +5,10 @@ mixin col-label(txt)
   div.col-sm-3
     label= txt
 
-mixin datum(txt)
-  div.row
+mixin datum(txt, ngif)
+  - ngif = ngif || true
+  - console.log(ngif)
+  div.row(ng-if='#{ngif}')
     if txt
       +col-label(txt)
     div.col-sm-9
@@ -14,25 +16,29 @@ mixin datum(txt)
         block
 
 mixin multidatum(label, field, format)
-  +datum(label)
+  +datum(label, field+".length > 0")
     ul
-      li(ng-repeat="obj in #{field}")
+      li(ng-repeat="obj_ii in #{field}")
         if block
           block
         else
-          {{ obj.value }}
-        span.badge {{ obj.label }}
+          {{ obj_ii.value }}
+        span.badge {{ obj_ii.label }}
 
 mixin address_gmaps(src)
   a(href="http://maps.google.com/?q={{ #{src}.street }},%20{{ #{src}.city }},%20{{ #{src}.state }}%20{{ #{src}.zip}}", target='_blank')
     if block
       block
 
-mixin address
-  +address_gmaps("obj")
-    span {{ obj.street }}
+mixin address(n)
+  +address_gmaps(n)
+    span {{ obj_ii.street }}
     br
-    span {{ obj.city }}, {{ obj.state}} {{ obj.zip }}
+    span {{ obj_ii.city }}, {{ obj_ii.state}} {{ obj_ii.zip }}
+
+mixin socialmedia(n)
+  a(ng-if='#{n}.label == "Twitter"', target='_blank', ng-href='http://www.twitter.com/{{ #{n}.value }}') {{ #{n}.value }}
+  a(ng-if='#{n}.label == "Facebook"', target='_blank', ng-href='http://www.facebook.com/{{ #{n}.value }}') {{ obj.name }}
 
 mixin editdeletebuttons(base_url)
   div.editdeletebuttons.btn-group.btn-group-sm

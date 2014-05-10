@@ -10,14 +10,14 @@ div.detail
     +datum
       h3 {{ obj.age.formatted }}
   +multidatum("Important Dates", "obj.date")
-    {{ obj.value | date }} 
+    {{ obj_ii.value | date }} 
   +multidatum("Email", "obj.email")
-    a(ng-href='mailto:{{ obj.value }}') {{ obj.value }}
+    a(ng-href='mailto:{{ obj_ii.value }}') {{ obj_ii.value }}
   +multidatum("Phone", "obj.phone")
-    a(ng-href='tel:{{ obj.value }}') {{ obj.value }}
+    a(ng-href='tel:{{ obj_ii.value }}') {{ obj_ii.value }}
   +multidatum("Social Media", "obj.social_media")
-    a(ng-href='http://www.{{ obj.label }}.com/{{ obj.value }}') {{ obj.value }}
+    +socialmedia('obj_ii')
   +multidatum("Address", "obj.address")
-    +address
+    +address('obj_ii')
   +multidatum("Relationships", "obj.relationships")
-    {{ obj.person_a.name }} = {{ obj.type }} = {{ obj.person_b.name }}
+    {{ obj_ii.person_a.name }} = {{ obj_ii.type }} = {{ obj_ii.person_b.name }}
