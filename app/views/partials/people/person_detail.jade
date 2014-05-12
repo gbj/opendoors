@@ -1,7 +1,8 @@
 include ../addons
 
 div.detail
-  +editdeletebuttons('/people/{{ obj.slug }}')
+  if user && (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation.id))
+    +editdeletebuttons('/people/{{ obj.slug }}')
   +datum
     h1 {{ obj.first_name }} {{ obj.last_name }}
   +datum
