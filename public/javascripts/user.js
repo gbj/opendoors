@@ -4,12 +4,16 @@ var app = angular.module('opendoors');
 app.value('redirectToUrlAfterLogin', { url: '/' });
 app.factory('appAuth', function ($location,  redirectToUrlAfterLogin) {
   return {
-    saveAttemptUrl: function() {
-      if($location.path().toLowerCase() != '/login') {
-        redirectToUrlAfterLogin.url = $location.path();
+    saveAttemptUrl: function(url) {
+      if(!url) {
+        if($location.path().toLowerCase() != '/login') {
+          redirectToUrlAfterLogin.url = $location.path();
+        }
+        else
+          redirectToUrlAfterLogin.url = '/';
+      } else {
+        redirectToUrlAfterLogin.url = url
       }
-      else
-        redirectToUrlAfterLogin.url = '/';
     },
     loginRedirectUrl: function() {
       return redirectToUrlAfterLogin.url;

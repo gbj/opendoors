@@ -164,7 +164,11 @@ app.controller("NavCtrl", ['$scope', '$http', '$location', function($scope, $htt
   }
 }]);
 
-app.run(function($rootScope, $route) {
+app.run(function($rootScope, $route, $location, appAuth) {
+  $rootScope.$on('$locationChangeStart', function(event, next, current) { 
+    appAuth.saveAttemptUrl(current);
+  });
+
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
       //Change page title, based on Route information
       $rootScope.title = $route.current.title;
