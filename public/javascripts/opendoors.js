@@ -134,13 +134,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider',
     $locationProvider.html5Mode(true);
   }]);
 
-app.run(function($rootScope, $route) {
-  $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
-      //Change page title, based on Route information
-      $rootScope.title = $route.current.title;
-    });
-});
-
 app.controller("IndexCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
   if(user && user.congregation) {
     $scope.username = user.username;
@@ -170,3 +163,10 @@ app.controller("NavCtrl", ['$scope', '$http', '$location', function($scope, $htt
       });
   }
 }]);
+
+app.run(function($rootScope, $route) {
+  $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
+      //Change page title, based on Route information
+      $rootScope.title = $route.current.title;
+    });
+});

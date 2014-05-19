@@ -60,12 +60,19 @@ module.exports = function(app) {
 
   // Backend -- API
   app.get('/api/people', CRUD.readAll(Person, {
+    permission: function(user) {
+      return !!user;
+    },
     query: function(user) {
       return {congregation: user.congregation};
     }
   }));
   app.post('/api/people', CRUD.create(Person));
-  app.get('/api/people/:slug', CRUD.read(Person));
+  app.get('/api/people/:slug', CRUD.read(Person, {
+    permission: function(user, obj) {
+      return (user.congregation == obj.congregation);
+    }
+  }));
   app.put('/api/people/:slug', CRUD.update(Person, {
     permission: function(user, obj) {
       return (user.role == 'Super-Admin' || (user.role == 'Admin' && user.congregation == obj.congregation));

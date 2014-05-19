@@ -1,5 +1,40 @@
 var app = angular.module('opendoors');
 
+// Servie to redirect and login when permission is denied (403 error)
+app.value('redirectToUrlAfterLogin', { url: '/' });
+app.factory('appAuth', function ($location,  redirectToUrlAfterLogin) {
+  return {
+    saveAttemptUrl: function() {
+      if($location.path().toLowerCase() != '/login') {
+        redirectToUrlAfterLogin.url = $location.path();
+      }
+      else
+        redirectToUrlAfterLogin.url = '/';
+    },
+    loginRedirectUrl: function() {
+      return redirectToUrlAfterLogin.url;
+    }
+  };
+});
+
+app.config(function($httpProvider) {
+  $httpProvider.responseInterceptors.push('securityInterceptor');
+})
+.provider('securityInterceptor', function() {
+  this.$get = function($location, $q, $injector) {
+    return function(promise) {
+      var appAuth = $injector.get('appAuth');
+      return promise.then(null, function(response) {
+        if(response.status === 401 || response.status == 403) {
+          appAuth.saveAttemptUrl();
+          $location.path('/login');
+        }
+        return $q.reject(response);
+      });
+    };
+  };
+});
+
 // User Admin
 app.controller("UserListCtrl", ngCRUD.readList('/api/user', {populate: 'congregation'}));
 app.controller("UserDetailCtrl", ngCRUD.read('/api/user', {populate: 'congregation'})); // ngCRUD will add slug
@@ -67,7 +102,7 @@ var changeLocation = function($scope, $location, url, forceReload) {
   }
 };
 
-app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $http, $location) {
+app.controller("LoginCtrl", ['$scope', '$http', '$location', 'appAuth', function($scope, $http, $location, appAuth) {
   $scope.username = "";
   $scope.password = "";
   $scope.error = null;
@@ -90,8 +125,9 @@ app.controller("LoginCtrl", ['$scope', '$http', '$location', function($scope, $h
         if (response.error) {
           console.log(response.error);
         } else {
-          changeLocation($scope, $location, '/', true);
+          changeLocation($scope, $location, appAuth.loginRedirectUrl(), true);
         }
+        
       })
       .error(function(data) {
         $scope.buttonDisabled = false;

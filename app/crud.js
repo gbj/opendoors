@@ -66,22 +66,33 @@ module.exports = {
   },
   read: function(model, options) {
     return (function(req, res) {
-      var populates = url.parse(req.url, true).query.populate || '';
-      // Search by slug or by ID
-      var query = {$or: [{slug: req.params.slug}]};
-      // If it matches a query for a valid ObjectID, add that to query
-      if (req.params.slug.match(/^[0-9a-fA-F]{24}$/)) {
-        query.$or.push({_id: req.params.slug});
+      // First, check for permission
+      var permission = true;
+      if(options && options.permission) {
+        permission = !!req.user && options.permission(req.user);
       }
-      var found = populate(model.findOne(query), populates);
-      found.exec(function(err, obj) {
-        if(err || obj === null) {
-          res.status(404);
-          res.send('404');
-        } else {
-          res.json(obj);
+
+      if(permission) {
+        var populates = url.parse(req.url, true).query.populate || '';
+        // Search by slug or by ID
+        var query = {$or: [{slug: req.params.slug}]};
+        // If it matches a query for a valid ObjectID, add that to query
+        if (req.params.slug.match(/^[0-9a-fA-F]{24}$/)) {
+          query.$or.push({_id: req.params.slug});
         }
-      });
+        var found = populate(model.findOne(query), populates);
+        found.exec(function(err, obj) {
+          if(err || obj === null) {
+            res.status(404);
+            res.send('404');
+          } else {
+            res.json(obj);
+          }
+        });
+      } else {
+        res.status(403);
+        res.json({error: 'You do not have permission to access this resource.'});
+      }
     });
   },
   create: function(model, options) {
